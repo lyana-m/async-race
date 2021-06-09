@@ -73,5 +73,8 @@ module.exports = ({
     //   ],
     // }),
   ],
+  experiments: {  
+    topLevelAwait: true,  
+  },
   ...devServer(develop),
 });

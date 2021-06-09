@@ -36,13 +36,15 @@ body {
   display: flex;  
   justify-content: space-between;
   align-items: center;
-  padding: 30px 0;  
+  padding: 30px 0 10px;  
 }
 
 
 .main-header {  
   font-family: "Righteous";
-  font-size: 100px;
+  width: 33.333%;
+  font-size: 70px;
+  text-align: center;
   text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ff00de, 0 0 70px #ff00de, 0 0 80px #ff00de, 0 0 100px #ff00de;
 }
 
@@ -50,11 +52,11 @@ body {
   background: none;
   border: 3px solid;
   border-bottom: 8px solid;
-  width: 180px;
+  width: 140px;
   margin: 10px;
-  padding: 15px 30px;
+  padding: 10px 20px;
   text-transform: uppercase;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 700;
   color: #a972cb;
   transition: 0.25s;
@@ -67,6 +69,12 @@ body {
   border-color: #CFC320;
   color: #fff;
   box-shadow: 0 0 10px #CFC320, inset 0 0 0 2em #CFC320, ;
+}
+
+.btn:disabled {
+  opacity: .5;
+  cursor: default;
+  pointer-events: none;
 }
 
 .header-btn-container {
@@ -101,7 +109,7 @@ body {
 
 .btn-create,
 .btn-random {
-  width: 220px;
+  width: 160px;
 }
 
 .page-description {
@@ -118,8 +126,7 @@ body {
   margin-right: 50px;
 }
 
-.track-container {
-  height: 150px;
+.track-container {  
   border-bottom: 2px dashed white;
   position: relative;
   margin-bottom: 30px;
@@ -132,11 +139,11 @@ body {
 .btn-track {
   background: none;
   border: 1px solid #BDEA15;  
-  width: 130px;
+  width: 85px;
   margin: 10px;
-  padding: 10px 15px;
+  padding: 6px 12px;
   text-transform: uppercase;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 700;
   color: #BDEA15;
   transition: 0.25s;
@@ -151,46 +158,53 @@ body {
 }
 
 .btn-remove {
-  margin-right: 60px;
+  margin-right: 30px;
+  margin-left: 0;
 }
 
 .car-model {
   display: inline-block;
-  font-size: 16px;
+  font-size: 14px;
   text-transform: uppercase;
 }
 
 .engine-btn-container {
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
+  margin-bottom: 25px;
 }
 
 .btn-engine {
-  width: 30px;
+  width: 25px;
   padding: 5px;
-  margin: 5px;
-  margin-left: 10px;
+  margin: 0;
+  // margin-left: 10px;
   border-radius: 3px;
   border: 1px solid #EF9228; 
   color: #EF9228;
   box-shadow: 0 0 10px #EF9228;
+
+  &:first-child {
+    margin-left: 10px;
+    margin-right: 5px;
+  }
 }
 
 .btn-engine:hover {
   border-color: #EF9228;
   color: #fff;
-  box-shadow: 0 0 10px #EF9228, inset 0 0 0 2em #EF9228, ;
+  box-shadow: 0 0 10px #EF9228, inset 0 0 0 2em #EF9228;
 }
 
 .car-container {
   position: absolute;
-  bottom: -30px;
+  bottom: -25px;
   left: 100px;
 }
 
 .car-icon {  
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
 }
 
 .flag-container {
@@ -199,12 +213,17 @@ body {
   bottom: 0;
 
   svg {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
   }
 }
 
-
+.footer-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
 
 
 .text-input {
@@ -221,7 +240,6 @@ body {
   &:focus {
     box-shadow: 0 0 10px #0A8EED;
   }
-
 }
 
 .modal {
