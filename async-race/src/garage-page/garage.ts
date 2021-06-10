@@ -19,7 +19,7 @@ export const renderGarage = (main: HTMLElement) => {
   `;
 
   store.cars.map((car: ICar) => {
-    fragment.appendChild(renderTrack(car.name, car.color));
+    fragment.appendChild(renderTrack(car.name, car.color, car.id));
   });
 
   garage.appendChild(pageDescription);
@@ -27,19 +27,4 @@ export const renderGarage = (main: HTMLElement) => {
   
   main.innerHTML = garage.outerHTML;
 
-
-  // store.cars.map((car: ICar) => {
-  //   renderTrack(car.name, car.color);
-  // });
-  // return `
-  //   <div class="wrapper">
-  //     <div class="page-description">
-  //       <h2 class="currnent-page">Garage: 4 cars</h2>
-  //       <h2 class="page-number">Page #1</h2>
-  //     </div>
-  //     ${store.cars.map((car: ICar) => {
-  //       return renderTrack(car.name, car.color);
-  //     }).join('')}       
-  //   </div>
-  // `
 }

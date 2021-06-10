@@ -6,10 +6,8 @@ import { store } from "./store";
 export const renderFooter = () => {
   const footer = createElement('footer', ['footer']);
   const wrapper = createElement('div', ['wrapper', 'footer-wrapper']);
-  const prevBtn = createElement('button', ['btn', 'btn-prev']);
-  const nextBtn = createElement('button', ['btn', 'btn-next']);
-  prevBtn.innerHTML = 'prev';
-  nextBtn.innerHTML = 'next';
+  const prevBtn = createElement('button', ['btn', 'btn-prev'], 'prev');
+  const nextBtn = createElement('button', ['btn', 'btn-next'], 'next');  
   nextBtn.addEventListener('click', nextBtnHandler);
   prevBtn.addEventListener('click', prevBtnHandler)
   prevBtn.setAttribute('disabled', 'true');

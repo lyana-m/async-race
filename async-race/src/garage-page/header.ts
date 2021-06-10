@@ -1,50 +1,31 @@
 import { getCars } from "../api";
-import { createRandomCars } from "../utilities";
+import { createElement, createRandomCars } from "../utilities";
 import { makeNextBtnActive } from "./footer";
 import { renderGarage } from "./garage";
-import { showModal, closeModal, colorPreview, listenModal } from "./modal";
+import { showModal, closeModal, colorPreview} from "./modal";
 import { store } from "./store";
 
 export const renderHeader = () => {
-  return `
-    <header class="header">
-      <div class="wrapper header-wrapper">
-        <div class="header-btn-container header-btn-container-left">
-          <button class="btn btn-garage">to garage</button>
-          <button class="btn btn-winners">to winners</button>
-        </div>
-        <h1 class="main-header">async-race</h1>
-        <div class="header-btn-container header-btn-container-right">
-          <div class="header-btn-subcontainer">
-            <button class="btn btn-create">create car</button>
-            <button class="btn btn-random">random cars</button>
-          </div>
-          <div class="header-btn-subcontainer">
-            <button class="btn btn-race">race</button>
-            <button class="btn btn-reset">reset</button>
-          </div>
-        </div>
-      </div>
-    </header>
-  `
-}
+  const header = createElement('header', ['header']);
+  const wrapper = createElement('div', ['wrapper', 'header-wrapper']);
+  const leftContainer = createElement('div', ['header-btn-container', 'header-btn-container-left']);
+  const btnGarage = createElement('button', ['btn', 'btn-garage'], 'to garage');
+  const btnWinners = createElement('button', ['btn', 'btn-winners'], 'to winners');
+  const h1 = createElement('h1', ['main-header'], 'async-race');
+  const rightContainer = createElement('div', ['header-btn-container', 'header-btn-container-right']);
+  const subcontainer1 = createElement('div', ['header-btn-subcontainer']);
+  const btnCreate = createElement('button', ['btn', 'btn-create'], 'create car');
+  const btnRandom = createElement('button', ['btn', 'btn-random'], 'random cars');
+  const subcontainer2 = createElement('div', ['header-btn-subcontainer']);
+  const btnRace = createElement('button', ['btn', 'btn-race'], 'race');
+  const btnReset = createElement('button', ['btn', 'btn-reset'], 'reset');
 
-export const listenHeader = async () => {
-  document.body.addEventListener('click', async (event: MouseEvent) => {
-    const target = <HTMLElement>event?.target;
-    if (target.classList.contains('btn-create')) {
-      showModal();
-      listenModal();
-    }
-    if (target.classList.contains('overlay') || target.classList.contains('btn-cancel')) {
-      closeModal();
-    }
-    if (target.classList.contains('btn-random')) {
-      const main: HTMLElement | null = document.querySelector('.main');
+  btnCreate.addEventListener('click', showModal);
+  btnRandom.addEventListener('click', async () => {
+    const main: HTMLElement | null = document.querySelector('.main');
       console.log(main);
       await createRandomCars();
       const currentPage = store.carsPage;
-
       const response = await getCars(currentPage);
       store.cars = response.items;
       store.carsCount = response.totalCount;
@@ -53,6 +34,20 @@ export const listenHeader = async () => {
         renderGarage(main);
       }
       makeNextBtnActive();
-    }
   })
+
+  subcontainer1.appendChild(btnCreate);
+  subcontainer1.appendChild(btnRandom);
+  subcontainer2.appendChild(btnRace);
+  subcontainer2.appendChild(btnReset);
+  leftContainer.appendChild(btnGarage);
+  leftContainer.appendChild(btnWinners);
+  rightContainer.appendChild(subcontainer1);
+  rightContainer.appendChild(subcontainer2);
+  wrapper.appendChild(leftContainer);
+  wrapper.appendChild(h1);
+  wrapper.appendChild(rightContainer);
+  header.appendChild(wrapper);
+
+  return header;
 }
