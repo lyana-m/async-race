@@ -1,4 +1,4 @@
-import { createCar, getCars } from "../api";
+import { createCar, getCars, updateCar } from "../api";
 import { carImage, createElement } from "../utilities";
 import { makeNextBtnActive } from "./footer";
 import { renderGarage } from "./garage";
@@ -19,7 +19,7 @@ export const renderModal = () => {
   const btnContainer = createElement('div', ['modal-btn-container']);
   const textInput = createElement('input', ['text-input']);
   const colorInput = createElement('input', ['color-input']);
-  const btnOk = createElement('button', ['btn', 'btn-ok'], 'ok');  
+  const btnOk = createElement('button', ['btn', 'btn-ok'], 'ok');
   const btnReset = createElement('button', ['btn', 'btn-reset'], 'reset');
   preview.innerHTML = `${carImage}`;
   textInput.setAttribute('type', 'text');
@@ -56,7 +56,7 @@ export const closeModal = () => {
   const modal = document.querySelector('.modal');
   const createBtn = document.querySelector('.btn-create-submit');
   (<HTMLElement>modal).style.display = 'none';
-  createBtn?.removeEventListener('click', modalHandler);
+  // createBtn?.removeEventListener('click', modalHandler);
 }
 
 export const clearModal = () => {
@@ -71,21 +71,28 @@ export const clearModal = () => {
 }
 
 const modalHandler = async () => {
+  const id = store.selectedId;
   const main = document.querySelector('main');
   const carProps = getCarProps();
+  const currentPage = store.carsPage;
   closeModal();
   clearModal();
-  await createCar(carProps);
-  const response = await getCars(1);
-  store.cars = response.items;
-  store.carsCount = response.totalCount;
 
-  console.log(store.carsCount);
+  if (id >= 0) {
+    await updateCar(id, carProps);
+    store.selectedId = -1;
+    const response = await getCars(currentPage);
+    store.cars = response.items;
+  } else {
+    await createCar(carProps);
+    const response = await getCars(currentPage);
+    store.cars = response.items;
+    store.carsCount = response.totalCount;
 
-  if (+store.carsCount! > 7) {
-    makeNextBtnActive();
+    if (+store.carsCount! > 7) {
+      makeNextBtnActive();
+    }    
   }
-
   if (main) {
     renderGarage(main);
   }

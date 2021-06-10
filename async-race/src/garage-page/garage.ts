@@ -21,10 +21,9 @@ export const renderGarage = (main: HTMLElement) => {
   store.cars.map((car: ICar) => {
     fragment.appendChild(renderTrack(car.name, car.color, car.id));
   });
-
+  
   garage.appendChild(pageDescription);
   garage.appendChild(fragment);
   
   main.innerHTML = garage.outerHTML;
-
 }

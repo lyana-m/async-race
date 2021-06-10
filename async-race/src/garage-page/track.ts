@@ -1,10 +1,11 @@
+import { deleteCar, getCars } from '../api';
 import { createElement } from '../utilities';
 import { renderCar } from './car';
-import { ICar } from './garage';
-import { getCarProps } from './modal';
+import { ICar, renderGarage } from './garage';
+import { getCarProps, showModal } from './modal';
 import { store } from './store';
 
-export const renderTrack = (carName: string, color: string, id: number) => {  
+export const renderTrack = (carName: string, color: string, id: number) => {
   const track = createElement('div', ['track-container']);
   track.setAttribute('id', `${id}`);
   const trackBtnContainer = createElement('div', ['track-btn-container']);
@@ -32,10 +33,39 @@ export const renderTrack = (carName: string, color: string, id: number) => {
   track.appendChild(engineBtnContainer);
   track.appendChild(carContainer);
   track.appendChild(flagContainer);
-  
-  return track;  
+
+  return track;
 }
 
-export const createNewTrack = (newCar: ICar) => {  
-  return renderTrack(newCar.name, newCar.color, newCar.id);  
-} 
+export const createNewTrack = (newCar: ICar) => {
+  return renderTrack(newCar.name, newCar.color, newCar.id);
+}
+
+export const removeTrack = async (event: Event) => {
+  const target = event.target;
+  const id = Number((<HTMLElement>target).closest('.track-container')?.getAttribute('id'));
+  const currentPage = store.carsPage;
+  const main: HTMLElement | null = document.querySelector('.main');
+  console.log(id);
+  await deleteCar(id);
+  const response = await getCars(currentPage);
+  store.cars = response.items;
+  store.carsCount = response.totalCount;
+  if (main) {
+    renderGarage(main);
+  }
+}
+
+export const updateTrack = (event: Event) => {
+  const target = event.target;  
+  const id = Number((<HTMLElement>target).closest('.track-container')?.getAttribute('id'));
+  store.selectedId = id;
+  const textInput = document.querySelector('.text-input');
+  const colorInput = document.querySelector('.color-input');
+  const carParts = document.querySelectorAll('.preview-car path');  
+  const car = store.cars.find((car: ICar) => car.id === id);
+  carParts.forEach(part => (<HTMLElement>part).style.fill = `${car.color}`);
+  (<HTMLInputElement>textInput).value = car.name;
+  (<HTMLInputElement>colorInput).value = car.color;
+  showModal();
+}

@@ -7,4 +7,5 @@ export const store = {
   carsPage: 1,
   cars: response.items,
   carsCount: response.totalCount,
+  selectedId: -1
 }
