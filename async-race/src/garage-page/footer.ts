@@ -9,9 +9,11 @@ export const renderFooter = () => {
   const prevBtn = createElement('button', ['btn', 'btn-prev'], 'prev');
   const nextBtn = createElement('button', ['btn', 'btn-next'], 'next');  
   nextBtn.addEventListener('click', nextBtnHandler);
-  prevBtn.addEventListener('click', prevBtnHandler)
-  prevBtn.setAttribute('disabled', 'true');
-  nextBtn.setAttribute('disabled', 'true');
+  prevBtn.addEventListener('click', prevBtnHandler);
+  // prevBtn.setAttribute('disabled', 'true');
+  // nextBtn.setAttribute('disabled', 'true');
+  (<HTMLButtonElement>prevBtn).disabled = true;
+  (<HTMLButtonElement>nextBtn).disabled = true;
   wrapper.appendChild(prevBtn);
   wrapper.appendChild(nextBtn);
   footer.appendChild(wrapper);
@@ -20,22 +22,26 @@ export const renderFooter = () => {
 
 export const makeNextBtnActive = () => {
   const nextBtn = document.querySelector('.btn-next');  
-  nextBtn?.removeAttribute('disabled');
+  // nextBtn?.removeAttribute('disabled');
+  (<HTMLButtonElement>nextBtn).disabled = false;
 }
 
 export const makeNextBtnDisabled = () => {
   const nextBtn = document.querySelector('.btn-next');  
-  nextBtn?.setAttribute('disabled', 'true');
+  // nextBtn?.setAttribute('disabled', 'true');
+  (<HTMLButtonElement>nextBtn).disabled = true;
 }
 
 export const makePrevBtnActive = () => {
   const prevBtn = document.querySelector('.btn-prev');  
-  prevBtn?.removeAttribute('disabled');
+  // prevBtn?.removeAttribute('disabled');
+  (<HTMLButtonElement>prevBtn).disabled = false;
 }
 
 export const makePrevBtnDisabled = () => {
   const prevBtn = document.querySelector('.btn-prev');  
-  prevBtn?.setAttribute('disabled', 'true');
+  // prevBtn?.setAttribute('disabled', 'true');
+  (<HTMLButtonElement>prevBtn).disabled = true;
 }
 
 const nextBtnHandler = async () => {

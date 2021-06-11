@@ -1,4 +1,5 @@
 import { createCar, IBody } from "./api";
+import { store } from "./garage-page/store";
 
 export const carImage = `
   <?xml version="1.0"?>
@@ -51,3 +52,45 @@ export const createRandomCars = () => {
   carProps.forEach(car => createCar(car));
 }
 
+export const getDistanceBetween = (car: HTMLElement, flag: HTMLElement) => {
+  const carProps = car.getBoundingClientRect();
+  const flagProps = flag.getBoundingClientRect();
+  // const carCenter = { x: carProps.x + carProps.width / 2,  y: carProps.y + carProps.height / 2 };
+  // const flagCenter = { x: flagProps.x + flagProps.width / 2,  y: flagProps.y + flagProps.height / 2 };
+  const carCenter = carProps.x + carProps.width / 2;
+  const flagCenter = flagProps.x + flagProps.width / 2;
+
+  return flagCenter - carCenter;
+}
+
+interface IState {
+  id: number;
+}
+
+export const animateCar = (car: HTMLElement, id: number, distance: number, duration: number) => {
+  let start: number;
+  let requestId: number;  
+
+  function move(timestamp: DOMHighResTimeStamp) {
+    if (start === undefined) {
+      start = timestamp;
+    }
+
+    const elapsedTime = timestamp - start;
+    const passedDistance = Math.round(elapsedTime * (distance / duration));
+
+    car!.style.transform = `translateX(${Math.min(passedDistance, distance) + 70}px)`;
+
+    // if (passedDistance < distance) {      
+    //   requestId = window.requestAnimationFrame(move);
+    // }
+    if (elapsedTime < duration) {
+      requestId = window.requestAnimationFrame(move);
+      // console.log('requestId', requestId);
+      store.animation[id] = requestId;
+    }
+  }
+  requestId = window.requestAnimationFrame(move);
+  // console.log(requestId);
+  return;
+}

@@ -58,7 +58,7 @@ export const startEngine = async (id: number) => {
   const response = await fetch(`${engine}/?id=${id}&status=started`, {
     method: 'GET',
   });
-  await response.json();
+  return await response.json();
 }
 
 export const stopEngine = async (id: number) => {

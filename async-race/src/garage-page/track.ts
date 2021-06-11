@@ -1,5 +1,5 @@
-import { deleteCar, getCars } from '../api';
-import { createElement } from '../utilities';
+import { deleteCar, getCars, startEngine, stopEngine, switchToDrive } from '../api';
+import { animateCar, createElement, getDistanceBetween } from '../utilities';
 import { renderCar } from './car';
 import { ICar, renderGarage } from './garage';
 import { getCarProps, showModal } from './modal';
@@ -15,6 +15,7 @@ export const renderTrack = (carName: string, color: string, id: number) => {
   const engineBtnContainer = createElement('div', ['engine-btn-container']);
   const btnStart = createElement('button', ['btn-track', 'btn-engine', 'btn-start'], 'a');
   const btnStop = createElement('button', ['btn-track', 'btn-engine', 'btn-stop'], 'b');
+  (<HTMLButtonElement>btnStop).disabled = true;
   const carContainer = createElement('div', ['car-container']);
   carContainer.innerHTML = `${renderCar(color)}`;
   const flagContainer = createElement('div', ['flag-container']);
@@ -41,9 +42,9 @@ export const createNewTrack = (newCar: ICar) => {
   return renderTrack(newCar.name, newCar.color, newCar.id);
 }
 
-export const removeTrack = async (event: Event) => {
-  const target = event.target;
-  const id = Number((<HTMLElement>target).closest('.track-container')?.getAttribute('id'));
+export const removeTrack = async (id: number) => {
+  // const target = event.target;
+  // const id = Number((<HTMLElement>target).closest('.track-container')?.getAttribute('id'));
   const currentPage = store.carsPage;
   const main: HTMLElement | null = document.querySelector('.main');
   console.log(id);
@@ -56,16 +57,64 @@ export const removeTrack = async (event: Event) => {
   }
 }
 
-export const updateTrack = (event: Event) => {
-  const target = event.target;  
-  const id = Number((<HTMLElement>target).closest('.track-container')?.getAttribute('id'));
+export const updateTrack = (id: number) => {
+  // const target = event.target;  
+  // const id = Number((<HTMLElement>target).closest('.track-container')?.getAttribute('id'));
   store.selectedId = id;
   const textInput = document.querySelector('.text-input');
   const colorInput = document.querySelector('.color-input');
   const carParts = document.querySelectorAll('.preview-car path');  
   const car = store.cars.find((car: ICar) => car.id === id);
-  carParts.forEach(part => (<HTMLElement>part).style.fill = `${car.color}`);
-  (<HTMLInputElement>textInput).value = car.name;
-  (<HTMLInputElement>colorInput).value = car.color;
+  carParts.forEach(part => (<HTMLElement>part).style.fill = `${car?.color}`);
+  (<HTMLInputElement>textInput).value = car?.name ?? '';
+  (<HTMLInputElement>colorInput).value = car?.color ?? '';
   showModal();
+}
+
+export const startDriving = async (track: HTMLElement, id: number) => {
+  const startBtn = track.querySelector('.btn-start');
+  const stopBtn = track.querySelector('.btn-stop');
+  (<HTMLButtonElement>startBtn).disabled = true;
+
+  const response = await startEngine(id);
+  console.log(response);
+  const velocity = response.velocity;
+  const distance = response.distance;
+  const time = Math.round(distance / velocity);
+
+  (<HTMLButtonElement>stopBtn).disabled = false;
+
+  const car: HTMLElement | null = track.querySelector('.car-container');
+  const flag: HTMLElement | null = track.querySelector('.flag-container');
+  const distanceBetween = getDistanceBetween(car!, flag!);
+
+  // const animationId = animateCar(car!, id, distanceBetween, time);
+  animateCar(car!, id, distanceBetween, time);
+  
+  // store.animation[id] = animationId;
+
+  const newReponse = await switchToDrive(id);
+
+  console.log(newReponse);
+
+  if (!newReponse.success) {
+    const animationId = store.animation[id];
+    console.log(animationId);
+    window.cancelAnimationFrame(animationId);
+  }
+  // console.log(store.animation);
+  
+}
+
+export const stopDriving = async (track: HTMLElement, id: number) => {
+  const car: HTMLElement | null = track.querySelector('.car-container');
+  const startBtn = track.querySelector('.btn-start');
+  const stopBtn = track.querySelector('.btn-stop');
+  
+  await stopEngine(id);
+
+  cancelAnimationFrame(store.animation[id]);
+  car!.style.transform = `translateX(0)`;
+  (<HTMLButtonElement>startBtn).disabled = false;
+  (<HTMLButtonElement>stopBtn).disabled = true;
 }

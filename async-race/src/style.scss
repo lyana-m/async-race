@@ -71,7 +71,8 @@ body {
   box-shadow: 0 0 10px #CFC320, inset 0 0 0 2em #CFC320, ;
 }
 
-.btn:disabled {
+.btn:disabled,
+.btn-engine:disabled {
   opacity: .5;
   cursor: default;
   pointer-events: none;
