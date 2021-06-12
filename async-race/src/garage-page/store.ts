@@ -13,6 +13,7 @@ interface IStore {
   carsCount: string | null,
   selectedId: number,
   animation: IAnimation,
+  isFinished: boolean
 }
 
 export const store: IStore = {
@@ -21,4 +22,5 @@ export const store: IStore = {
   carsCount: response.totalCount,
   selectedId: -1,
   animation: {},
+  isFinished: false,
 }

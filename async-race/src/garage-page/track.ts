@@ -71,9 +71,11 @@ export const updateTrack = (id: number) => {
   showModal();
 }
 
-export const startDriving = async (track: HTMLElement, id: number) => {
-  const startBtn = track.querySelector('.btn-start');
-  const stopBtn = track.querySelector('.btn-stop');
+export const startDriving = async (id: number) => {
+  const track = document.getElementById(`${id}`);
+  const startBtn = track!.querySelector('.btn-start');
+  const stopBtn = track!.querySelector('.btn-stop');
+  
   (<HTMLButtonElement>startBtn).disabled = true;
 
   const response = await startEngine(id);
@@ -84,32 +86,35 @@ export const startDriving = async (track: HTMLElement, id: number) => {
 
   (<HTMLButtonElement>stopBtn).disabled = false;
 
-  const car: HTMLElement | null = track.querySelector('.car-container');
-  const flag: HTMLElement | null = track.querySelector('.flag-container');
+  const car: HTMLElement | null = track!.querySelector('.car-container');
+  const flag: HTMLElement | null = track!.querySelector('.flag-container');
   const distanceBetween = getDistanceBetween(car!, flag!);
-
-  // const animationId = animateCar(car!, id, distanceBetween, time);
-  animateCar(car!, id, distanceBetween, time);
   
-  // store.animation[id] = animationId;
+  animateCar(car!, id, distanceBetween, time);  
 
   const newReponse = await switchToDrive(id);
 
   console.log(newReponse);
 
   if (!newReponse.success) {
-    const animationId = store.animation[id];
-    console.log(animationId);
+    const animationId = store.animation[id];    
     window.cancelAnimationFrame(animationId);
-  }
-  // console.log(store.animation);
+  } else {    
+    // store.isFinished = true;
+    // console.log('isFinished', store.isFinished);
+    // console.log(id);
+    return Promise.resolve({ id: id, time: time });
+  } 
   
+  // return { id: id, success: newReponse.success };
+  return Promise.reject(new Error('not first'));
 }
 
-export const stopDriving = async (track: HTMLElement, id: number) => {
-  const car: HTMLElement | null = track.querySelector('.car-container');
-  const startBtn = track.querySelector('.btn-start');
-  const stopBtn = track.querySelector('.btn-stop');
+export const stopDriving = async (id: number) => {
+  const track = document.getElementById(`${id}`);
+  const car: HTMLElement | null = track!.querySelector('.car-container');
+  const startBtn = track!.querySelector('.btn-start');
+  const stopBtn = track!.querySelector('.btn-stop');
   
   await stopEngine(id);
 
@@ -117,4 +122,19 @@ export const stopDriving = async (track: HTMLElement, id: number) => {
   car!.style.transform = `translateX(0)`;
   (<HTMLButtonElement>startBtn).disabled = false;
   (<HTMLButtonElement>stopBtn).disabled = true;
+}
+
+export const startRace = async () => {
+  // store.cars.forEach(car => startDriving(car.id));
+  const promises = store.cars.map(car => startDriving(car.id));
+
+
+  console.log(promises);
+  const winner = await Promise.any(promises).then(p => p).catch(e => new Error('custom error'));
+  // console.log('winner', winner);
+}
+
+export const stopRace = () => {
+  store.cars.forEach(car => stopDriving(car.id));
+  // store.isFinished = false;
 }

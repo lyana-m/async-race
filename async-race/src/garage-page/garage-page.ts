@@ -2,7 +2,7 @@ import { renderHeader } from './header';
 import { renderGarage, ICar } from './garage';
 import { createElement } from '../utilities';
 import { renderModal } from './modal';
-import { createNewTrack, removeTrack, startDriving, stopDriving, updateTrack } from './track';
+import { createNewTrack, removeTrack, startDriving, startRace, stopDriving, stopRace, updateTrack } from './track';
 import { renderFooter } from './footer';
 
 export const fragment = document.createDocumentFragment();
@@ -33,9 +33,15 @@ document.addEventListener('click', (event: Event) => {
     updateTrack(id);
   };
   if ((<HTMLElement>target).classList.contains('btn-start')) {
-    startDriving(track!, id);
+    startDriving(id);
   };
   if ((<HTMLElement>target).classList.contains('btn-stop')) {
-    stopDriving(track!, id);
+    stopDriving(id);
+  };
+  if ((<HTMLElement>target).classList.contains('btn-race')) {
+    startRace();
+  };
+  if ((<HTMLElement>target).classList.contains('btn-reset')) {
+    stopRace();
   };
 })
