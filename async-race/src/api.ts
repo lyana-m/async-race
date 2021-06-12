@@ -75,4 +75,48 @@ export const switchToDrive = async (id: number) => {
   return response.status !== 200 ? { success: false } : { ...(await response.json()) };  
 }
 
+export const getWinner = async (id: number) => {
+  const response = await fetch(`${winners}/{${id}}`, {
+    method: 'GET'
+  });
+  return await response.json();
+}
 
+export const getWinners = async (page: number, limit: number = 10, sort: string = 'time', order: string = 'ASC') => {
+  const response = await fetch(`${garage}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`, {
+    method: 'GET',
+  });  
+  return {
+    items: await response.json(),
+    totalCount: response.headers.get('X-Total-Count'),  
+  }
+}
+
+export const createWinner = async (body: IBody) => {
+  const response = await fetch(`${winners}`, {
+    method: 'POST',
+    body: JSON.stringify(body),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  return await response.json();
+}
+
+export const deleteWinner = async (id: number) => {
+  const response = await fetch(`${winners}/${id}`, {
+    method: 'DELETE',
+  });
+  await response.json();
+}
+
+export const updateWinner = async (id: number, body: IBody) => {
+  const response = await fetch(`${winners}/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(body),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  await response.json();
+}
