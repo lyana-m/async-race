@@ -1,7 +1,8 @@
-import { getCars } from '../api';
+import { getCars, getWinners } from '../api';
 import { ICar } from './garage';
 
 const response = await getCars(1);
+const winnersResponse = await getWinners(1);
 
 interface IAnimation {
   [key: string]: number
@@ -13,7 +14,8 @@ interface IStore {
   carsCount: string | null,
   selectedId: number,
   animation: IAnimation,
-  isFinished: boolean
+  winnersPage: number,
+  winnersCount: string | null
 }
 
 export const store: IStore = {
@@ -22,5 +24,6 @@ export const store: IStore = {
   carsCount: response.totalCount,
   selectedId: -1,
   animation: {},
-  isFinished: false,
+  winnersPage: 1,
+  winnersCount: winnersResponse.totalCount  
 }

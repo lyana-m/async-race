@@ -91,6 +91,6 @@ export const animateCar = (car: HTMLElement, id: number, distance: number, durat
     }
   }
   requestId = window.requestAnimationFrame(move);
-  // console.log(requestId);
+  // console.log('1', requestId);
   return;
 }

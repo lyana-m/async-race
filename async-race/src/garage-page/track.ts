@@ -1,6 +1,7 @@
-import { deleteCar, getCars, startEngine, stopEngine, switchToDrive } from '../api';
+import { checkWinner, createWinner, deleteCar, getCar, getCars, getWinner, getWinners, startEngine, stopEngine, switchToDrive, updateWinner } from '../api';
 import { animateCar, createElement, getDistanceBetween } from '../utilities';
 import { renderCar } from './car';
+import { showCongrats } from './congrats';
 import { ICar, renderGarage } from './garage';
 import { getCarProps, showModal } from './modal';
 import { store } from './store';
@@ -46,15 +47,18 @@ export const removeTrack = async (id: number) => {
   // const target = event.target;
   // const id = Number((<HTMLElement>target).closest('.track-container')?.getAttribute('id'));
   const currentPage = store.carsPage;
-  const main: HTMLElement | null = document.querySelector('.main');
-  console.log(id);
+  // const main: HTMLElement | null = document.querySelector('.main');
+
+  const garage = document.querySelector('.garage');  
   await deleteCar(id);
   const response = await getCars(currentPage);
   store.cars = response.items;
   store.carsCount = response.totalCount;
-  if (main) {
-    renderGarage(main);
-  }
+  // if (main) {
+  //   renderGarage(main);
+  // }
+  // renderGarage();
+  (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
 }
 
 export const updateTrack = (id: number) => {
@@ -63,7 +67,7 @@ export const updateTrack = (id: number) => {
   store.selectedId = id;
   const textInput = document.querySelector('.text-input');
   const colorInput = document.querySelector('.color-input');
-  const carParts = document.querySelectorAll('.preview-car path');  
+  const carParts = document.querySelectorAll('.preview-car path');
   const car = store.cars.find((car: ICar) => car.id === id);
   carParts.forEach(part => (<HTMLElement>part).style.fill = `${car?.color}`);
   (<HTMLInputElement>textInput).value = car?.name ?? '';
@@ -75,11 +79,10 @@ export const startDriving = async (id: number) => {
   const track = document.getElementById(`${id}`);
   const startBtn = track!.querySelector('.btn-start');
   const stopBtn = track!.querySelector('.btn-stop');
-  
+
   (<HTMLButtonElement>startBtn).disabled = true;
 
   const response = await startEngine(id);
-  console.log(response);
   const velocity = response.velocity;
   const distance = response.distance;
   const time = Math.round(distance / velocity);
@@ -89,24 +92,18 @@ export const startDriving = async (id: number) => {
   const car: HTMLElement | null = track!.querySelector('.car-container');
   const flag: HTMLElement | null = track!.querySelector('.flag-container');
   const distanceBetween = getDistanceBetween(car!, flag!);
-  
-  animateCar(car!, id, distanceBetween, time);  
+
+  animateCar(car!, id, distanceBetween, time);
 
   const newReponse = await switchToDrive(id);
 
-  console.log(newReponse);
-
   if (!newReponse.success) {
-    const animationId = store.animation[id];    
+    const animationId = store.animation[id];
     window.cancelAnimationFrame(animationId);
-  } else {    
-    // store.isFinished = true;
-    // console.log('isFinished', store.isFinished);
-    // console.log(id);
-    return Promise.resolve({ id: id, time: time });
-  } 
-  
-  // return { id: id, success: newReponse.success };
+  } else {
+    return Promise.resolve({ id: id, time: (time / 1000) });
+  }
+
   return Promise.reject(new Error('not first'));
 }
 
@@ -115,7 +112,7 @@ export const stopDriving = async (id: number) => {
   const car: HTMLElement | null = track!.querySelector('.car-container');
   const startBtn = track!.querySelector('.btn-start');
   const stopBtn = track!.querySelector('.btn-stop');
-  
+
   await stopEngine(id);
 
   cancelAnimationFrame(store.animation[id]);
@@ -125,16 +122,27 @@ export const stopDriving = async (id: number) => {
 }
 
 export const startRace = async () => {
-  // store.cars.forEach(car => startDriving(car.id));
+  const raceBtn = document.querySelector('.btn-race');
+  (<HTMLButtonElement>raceBtn).disabled = true;
   const promises = store.cars.map(car => startDriving(car.id));
-
-
-  console.log(promises);
-  const winner = await Promise.any(promises).then(p => p).catch(e => new Error('custom error'));
-  // console.log('winner', winner);
+  const winner = await Promise.any(promises).then(p => p).catch(e => new Error('nobody win'));
+  
+  if (!(winner instanceof Error)) {
+    const winnerItem = await checkWinner(winner.id);
+    
+    if (!winnerItem.isCreated) {      
+      await createWinner({ ...winner, wins: 1 });  
+    } else {
+      const bestTime = winner.time < winnerItem.item.time ? winner.time : winnerItem.item.time;
+      await updateWinner(winner.id, { ...winner, time: bestTime, wins: winnerItem.item.wins + 1 });      
+    }
+    const car = await getCar(winner.id);
+    showCongrats(car.name, winner.time);
+  }
 }
 
 export const stopRace = () => {
+  const raceBtn = document.querySelector('.btn-race');
+  (<HTMLButtonElement>raceBtn).disabled = false;
   store.cars.forEach(car => stopDriving(car.id));
-  // store.isFinished = false;
 }

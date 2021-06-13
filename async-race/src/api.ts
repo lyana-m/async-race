@@ -8,6 +8,25 @@ export interface IBody {
   color: string
 }
 
+export interface IWinner {
+  id: number,
+  time: number,
+  wins?: number
+}
+
+export interface IWinnerMod {
+  id: number, 
+  time: number, 
+  wins: number, 
+  name: string, 
+  color: string
+}
+
+interface IWinners {
+  items: IWinnerMod[],
+  totalCount: string | null
+}
+
 export const getCar = async (id: number) => {
   const response = await fetch(`${garage}/${id}`, {
     method: 'GET',
@@ -82,17 +101,18 @@ export const getWinner = async (id: number) => {
   return await response.json();
 }
 
-export const getWinners = async (page: number, limit: number = 10, sort: string = 'time', order: string = 'ASC') => {
-  const response = await fetch(`${garage}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`, {
+export const getWinners = async (page: number, limit: number = 10, sort: string = 'time', order: string = 'ASC'): Promise<IWinners>  => {
+  const response = await fetch(`${winners}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`, {
     method: 'GET',
-  });  
+  });
+  const items = await response.json();
   return {
-    items: await response.json(),
+    items: await Promise.all(items.map(async (item: IWinner) => ({ ...item, ...await getCar(item.id)}))),
     totalCount: response.headers.get('X-Total-Count'),  
   }
 }
 
-export const createWinner = async (body: IBody) => {
+export const createWinner = async (body: IWinner) => {
   const response = await fetch(`${winners}`, {
     method: 'POST',
     body: JSON.stringify(body),
@@ -110,7 +130,7 @@ export const deleteWinner = async (id: number) => {
   await response.json();
 }
 
-export const updateWinner = async (id: number, body: IBody) => {
+export const updateWinner = async (id: number, body: IWinner) => {
   const response = await fetch(`${winners}/${id}`, {
     method: 'PUT',
     body: JSON.stringify(body),
@@ -119,4 +139,15 @@ export const updateWinner = async (id: number, body: IBody) => {
     }
   });
   await response.json();
+}
+
+export const checkWinner = async (id: number) => {
+  const response = await fetch(`${winners}/${id}`, {
+    method: 'GET'
+  });  
+  // return response.status === 404 ? false : true;
+  return {
+    isCreated: response.status !== 404,
+    item: await response.json()
+  }
 }

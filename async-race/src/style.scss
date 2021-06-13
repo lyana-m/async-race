@@ -19,7 +19,7 @@ html {
 
 body {
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
   font-family: "Roboto";
   font-style: normal;
   font-size: 14px;
@@ -64,11 +64,19 @@ body {
   cursor: pointer;
 }
 
-.btn:hover,
-.btn_active {
+.btn:hover {
   border-color: #CFC320;
   color: #fff;
-  box-shadow: 0 0 10px #CFC320, inset 0 0 0 2em #CFC320, ;
+  box-shadow: 0 0 10px #CFC320, inset 0 0 0 2em #CFC320;
+}
+
+.btn-active {
+  border-color: #CFC320;
+  color: #fff;
+  box-shadow: 0 0 10px #CFC320, inset 0 0 0 2em #CFC320;
+  cursor: default;
+  pointer-events: none;
+  opacity: .5;
 }
 
 .btn:disabled,
@@ -354,4 +362,71 @@ input[type=color]::-moz-color-swatch {
   .btn:last-child {
     margin-right: 0;
   }
+}
+
+.congrats-modal {
+  display: none;
+}
+
+.congrats-header {
+  position: absolute;
+  text-align: center;
+  text-transform: uppercase;
+  color: #EFEC28;
+  text-shadow: 0 0 10px #EFEC28, 0 0 20px #EFEC28, 0 0 30px #EFEC28;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  min-width: 740px;
+  padding: 50px;
+  border: 2px solid #01F505;
+  background-color: #000000;  
+  box-shadow: 0 0 10px #01F505, inset 0 0 10px #01F505;
+  z-index: 2;
+}
+
+// .table-wrapper {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   min-height: 100vh;
+// }
+
+.table {
+	width: 60%;
+	border-collapse:collapse;
+	border-spacing:0;
+	height: auto;
+  margin: 0 auto;
+  box-shadow: 0 0 10px #00FFF7;
+}
+
+
+.table,
+td,
+th {
+	border: 1px solid #00FFF7;
+}
+
+td,
+th {
+	padding: 3px;
+	width: 20%;
+	height: 35px;
+  vertical-align: middle;
+  text-align: center;
+  text-transform: uppercase;
+}
+th {
+	background: #0A8EED; 
+	color: #fff; 
+  padding: 20px 0;
+  font-size: 16px;
+	font-weight: 700;
+  text-transform: uppercase;
+}
+
+.row-car .car-icon {
+  margin-bottom: -20px;
 }

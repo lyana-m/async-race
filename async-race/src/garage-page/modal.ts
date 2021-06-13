@@ -7,7 +7,7 @@ import { store } from "./store";
 import { createNewTrack } from "./track";
 
 export const renderModal = () => {
-  const modal = createElement('div', ['modal']);
+  const modal = createElement('div', ['modal', 'car-modal']);
   const controls = createElement('div', ['controls']);
   const overlay = createElement('div', ['overlay']);
   const headerCreate = createElement('h2', ['controls-header'], 'Create car');
@@ -48,12 +48,12 @@ export const renderModal = () => {
 }
 
 export const showModal = () => {
-  const modal = document.querySelector('.modal');
+  const modal = document.querySelector('.car-modal');
   (<HTMLElement>modal).style.display = 'flex';
 }
 
 export const closeModal = () => {
-  const modal = document.querySelector('.modal');
+  const modal = document.querySelector('.car-modal');
   const createBtn = document.querySelector('.btn-create-submit');
   (<HTMLElement>modal).style.display = 'none';
   // createBtn?.removeEventListener('click', modalHandler);
@@ -71,8 +71,9 @@ export const clearModal = () => {
 }
 
 const modalHandler = async () => {
+  const garage = document.querySelector('.garage');
   const id = store.selectedId;
-  const main = document.querySelector('main');
+  // const main = document.querySelector('main');
   const carProps = getCarProps();
   const currentPage = store.carsPage;
   closeModal();
@@ -93,9 +94,11 @@ const modalHandler = async () => {
       makeNextBtnActive();
     }    
   }
-  if (main) {
-    renderGarage(main);
-  }
+  // if (main) {
+  //   renderGarage(main);
+  // }
+  // renderGarage();
+  (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
 }
 
 export const colorPreview = (colorInput: HTMLElement) => {

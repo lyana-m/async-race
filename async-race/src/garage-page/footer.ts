@@ -45,14 +45,16 @@ export const makePrevBtnDisabled = () => {
 }
 
 const nextBtnHandler = async () => {
-  const main = document.querySelector('main');
+  // const main = document.querySelector('main');
+  const garage = document.querySelector('.garage');
   const currentPage = store.carsPage;
   const response = await getCars(currentPage + 1);  
   store.cars = response.items;
   store.carsPage++;
-  if (main) {
-    renderGarage(main);
-  }
+  // if (main) {
+  //   renderGarage(main);
+  // }
+  (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
   if (store.cars.length < 7) {
     makeNextBtnDisabled();
   }
@@ -62,14 +64,17 @@ const nextBtnHandler = async () => {
 }
 
 const prevBtnHandler = async () => {
-  const main = document.querySelector('main');
+  // const main = document.querySelector('main');
+  const garage = document.querySelector('.garage');
   const currentPage = store.carsPage;
   const response = await getCars(currentPage - 1);
   store.cars = response.items;
   store.carsPage--;
-  if (main) {
-    renderGarage(main);
-  }
+  // if (main) {
+  //   renderGarage(main);
+  // }
+  // renderGarage();
+  (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
   if (store.carsPage === 1) {
     makePrevBtnDisabled();
   }
