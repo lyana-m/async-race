@@ -54,17 +54,10 @@ export const createRandomCars = () => {
 
 export const getDistanceBetween = (car: HTMLElement, flag: HTMLElement) => {
   const carProps = car.getBoundingClientRect();
-  const flagProps = flag.getBoundingClientRect();
-  // const carCenter = { x: carProps.x + carProps.width / 2,  y: carProps.y + carProps.height / 2 };
-  // const flagCenter = { x: flagProps.x + flagProps.width / 2,  y: flagProps.y + flagProps.height / 2 };
+  const flagProps = flag.getBoundingClientRect();  
   const carCenter = carProps.x + carProps.width / 2;
   const flagCenter = flagProps.x + flagProps.width / 2;
-
   return flagCenter - carCenter;
-}
-
-interface IState {
-  id: number;
 }
 
 export const animateCar = (car: HTMLElement, id: number, distance: number, duration: number) => {
@@ -80,17 +73,20 @@ export const animateCar = (car: HTMLElement, id: number, distance: number, durat
     const passedDistance = Math.round(elapsedTime * (distance / duration));
 
     car!.style.transform = `translateX(${Math.min(passedDistance, distance) + 70}px)`;
-
-    // if (passedDistance < distance) {      
-    //   requestId = window.requestAnimationFrame(move);
-    // }
+    
     if (elapsedTime < duration) {
-      requestId = window.requestAnimationFrame(move);
-      // console.log('requestId', requestId);
+      requestId = window.requestAnimationFrame(move);      
       store.animation[id] = requestId;
     }
   }
-  requestId = window.requestAnimationFrame(move);
-  // console.log('1', requestId);
+  requestId = window.requestAnimationFrame(move);  
   return;
+}
+
+export const makeBtnActive = (btn: HTMLButtonElement) => {   
+  btn.disabled = false;
+}
+
+export const makeBtnDisabled = (btn: HTMLButtonElement) => {  
+  btn.disabled = true;
 }

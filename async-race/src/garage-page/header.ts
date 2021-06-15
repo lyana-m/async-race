@@ -1,8 +1,7 @@
 import { getCars } from "../api";
-import { createElement, createRandomCars } from "../utilities";
-import { makeNextBtnActive } from "./footer";
+import { createElement, createRandomCars, makeBtnActive } from "../utilities";
 import { renderGarage } from "./garage";
-import { showModal, closeModal, colorPreview } from "./modal";
+import { showModal } from "./modal";
 import { store } from "./store";
 
 export const renderHeader = () => {
@@ -19,25 +18,21 @@ export const renderHeader = () => {
   const subcontainer2 = createElement('div', ['header-btn-subcontainer']);
   const btnRace = createElement('button', ['btn', 'btn-race'], 'race');
   const btnReset = createElement('button', ['btn', 'btn-reset'], 'reset');
-  const raceBtn = document.querySelector('.btn-race');
   (<HTMLButtonElement>btnReset).disabled = true;
 
-  btnCreate.addEventListener('click', showModal);
+  btnCreate.addEventListener('click', () => showModal('create'));
   btnRandom.addEventListener('click', async () => {
-    // const main: HTMLElement | null = document.querySelector('.main');
-    // console.log(main);
+    const nextBtn: HTMLButtonElement | null = document.querySelector('.btn-next');
     const garage = document.querySelector('.garage');
-    await createRandomCars();
+    createRandomCars();
     const currentPage = store.carsPage;
     const response = await getCars(currentPage);
     store.cars = response.items;
     store.carsCount = response.totalCount;
-
-    // if (main) {
-    //   renderGarage(main);
-    // }
+    
     (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
-    makeNextBtnActive();
+
+    if (nextBtn) makeBtnActive(nextBtn);
   })
 
   subcontainer1.appendChild(btnCreate);

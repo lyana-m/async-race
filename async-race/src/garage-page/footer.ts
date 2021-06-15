@@ -1,84 +1,56 @@
 import { getCars } from "../api";
-import { createElement } from "../utilities"
+import { createElement, makeBtnActive, makeBtnDisabled } from "../utilities"
 import { renderGarage } from "./garage";
 import { store } from "./store";
 
 export const renderFooter = () => {
   const footer = createElement('footer', ['footer']);
   const wrapper = createElement('div', ['wrapper', 'footer-wrapper']);
-  const prevBtn = createElement('button', ['btn', 'btn-prev'], 'prev');
-  const nextBtn = createElement('button', ['btn', 'btn-next'], 'next');  
-  nextBtn.addEventListener('click', nextBtnHandler);
-  prevBtn.addEventListener('click', prevBtnHandler);
-  // prevBtn.setAttribute('disabled', 'true');
-  // nextBtn.setAttribute('disabled', 'true');
-  (<HTMLButtonElement>prevBtn).disabled = true;
-  (<HTMLButtonElement>nextBtn).disabled = true;
+  const prevBtn = createElement('button', ['btn', 'btn-prev', 'garage-btn-prev'], 'prev');
+  const nextBtn = createElement('button', ['btn', 'btn-next', 'garage-btn-next'], 'next');  
   wrapper.appendChild(prevBtn);
   wrapper.appendChild(nextBtn);
   footer.appendChild(wrapper);
   return footer;
 }
 
-export const makeNextBtnActive = () => {
-  const nextBtn = document.querySelector('.btn-next');  
-  // nextBtn?.removeAttribute('disabled');
-  (<HTMLButtonElement>nextBtn).disabled = false;
-}
-
-export const makeNextBtnDisabled = () => {
-  const nextBtn = document.querySelector('.btn-next');  
-  // nextBtn?.setAttribute('disabled', 'true');
-  (<HTMLButtonElement>nextBtn).disabled = true;
-}
-
-export const makePrevBtnActive = () => {
-  const prevBtn = document.querySelector('.btn-prev');  
-  // prevBtn?.removeAttribute('disabled');
-  (<HTMLButtonElement>prevBtn).disabled = false;
-}
-
-export const makePrevBtnDisabled = () => {
-  const prevBtn = document.querySelector('.btn-prev');  
-  // prevBtn?.setAttribute('disabled', 'true');
-  (<HTMLButtonElement>prevBtn).disabled = true;
-}
-
-const nextBtnHandler = async () => {
-  // const main = document.querySelector('main');
-  const garage = document.querySelector('.garage');
+export const nextBtnHandler = async () => {  
+  const garage = document.querySelector('.garage');  
   const currentPage = store.carsPage;
   const response = await getCars(currentPage + 1);  
   store.cars = response.items;
-  store.carsPage++;
-  // if (main) {
-  //   renderGarage(main);
-  // }
-  (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
-  if (store.cars.length < 7) {
-    makeNextBtnDisabled();
-  }
-  if (store.carsPage > 1) {
-    makePrevBtnActive();
-  }
+  store.carsPage++;  
+  updateGargeBtnState();
+  (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;  
 }
 
-const prevBtnHandler = async () => {
-  // const main = document.querySelector('main');
-  const garage = document.querySelector('.garage');
+export const prevBtnHandler = async () => {  
+  const garage = document.querySelector('.garage');  
   const currentPage = store.carsPage;
   const response = await getCars(currentPage - 1);
   store.cars = response.items;
-  store.carsPage--;
-  // if (main) {
-  //   renderGarage(main);
-  // }
-  // renderGarage();
-  (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
+  store.carsPage--;  
+  updateGargeBtnState();
+  (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;  
+}
+
+export const updateGargeBtnState = () => {
+  const nextBtn: HTMLButtonElement | null = document.querySelector('.btn-next');
+  const prevBtn: HTMLButtonElement | null = document.querySelector('.btn-prev');  
+
   if (store.carsPage === 1) {
-    makePrevBtnDisabled();
-  }
-  if (store.cars.length === 7) {
-    makeNextBtnActive();
+    if (prevBtn) prevBtn.disabled = true;
+    if (store.cars.length < +store.carsCount!) {
+      if (nextBtn) nextBtn.disabled = false;
+    } else {
+      if (nextBtn) nextBtn.disabled = true;
+    }
+  } else {
+    if (prevBtn) prevBtn.disabled = false;    
+    if ((store.carsPage - 1) * 7 + store.cars.length === +store.carsCount!) {
+      if (nextBtn) nextBtn.disabled = true;
+    } else {
+      if (nextBtn) nextBtn.disabled = false;
+    }
   }
 }

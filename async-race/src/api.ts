@@ -1,3 +1,5 @@
+import { store } from "./garage-page/store";
+
 const baseURL = 'http://127.0.0.1:3000';
 const garage = `${baseURL}/garage`;
 const winners = `${baseURL}/winners`;
@@ -101,7 +103,7 @@ export const getWinner = async (id: number) => {
   return await response.json();
 }
 
-export const getWinners = async (page: number, limit: number = 10, sort: string = 'time', order: string = 'ASC'): Promise<IWinners>  => {
+export const getWinners = async (page: number, limit: number = 10, sort: string, order: string): Promise<IWinners>  => {
   const response = await fetch(`${winners}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`, {
     method: 'GET',
   });
