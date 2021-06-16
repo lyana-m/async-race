@@ -14,23 +14,31 @@ export const renderFooter = () => {
   return footer;
 }
 
-export const nextBtnHandler = async () => {  
+export const nextBtnHandler = async () => { 
+  const raceBtn = document.querySelector('.btn-race'); 
+  const resetBtn = document.querySelector('.btn-reset'); 
   const garage = document.querySelector('.garage');  
   const currentPage = store.carsPage;
   const response = await getCars(currentPage + 1);  
   store.cars = response.items;
   store.carsPage++;  
   updateGargeBtnState();
+  (<HTMLButtonElement>raceBtn).disabled = false;
+  (<HTMLButtonElement>resetBtn).disabled = true;
   (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;  
 }
 
-export const prevBtnHandler = async () => {  
+export const prevBtnHandler = async () => {
+  const raceBtn = document.querySelector('.btn-race');
+  const resetBtn = document.querySelector('.btn-reset');  
   const garage = document.querySelector('.garage');  
   const currentPage = store.carsPage;
   const response = await getCars(currentPage - 1);
   store.cars = response.items;
   store.carsPage--;  
   updateGargeBtnState();
+  (<HTMLButtonElement>raceBtn).disabled = false;
+  (<HTMLButtonElement>resetBtn).disabled = true;
   (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;  
 }
 

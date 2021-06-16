@@ -1,4 +1,4 @@
-import { getCar, getWinners,IWinner } from "../api";
+import { getWinners } from "../api";
 import { store } from "../garage-page/store";
 import { createElement } from "../utilities"
 import { renderEntry } from "./table-entry";
@@ -49,11 +49,6 @@ export const renderTable = () => {
 
   return winnersContainer;
 }
-
-// export const updateSortParam = (sortBy: string) => {
-//   store.sortOrder = store.sortOrder === 'ASC' ? 'DESC' : 'ASC';
-//   store.sortBy = sortBy;
-// }
 
 export const sort = async (sortBy: string) => {
   store.sortOrder = store.sortOrder === 'ASC' ? 'DESC' : 'ASC';

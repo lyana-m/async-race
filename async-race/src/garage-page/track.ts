@@ -1,4 +1,4 @@
-import { checkWinner, createWinner, deleteCar, getCar, getCars, getWinner, getWinners, startEngine, stopEngine, switchToDrive, updateWinner } from '../api';
+import { checkWinner, createWinner, deleteCar, deleteWinner, getCar, getCars, getWinner, getWinners, startEngine, stopEngine, switchToDrive, updateWinner } from '../api';
 import { animateCar, createElement, getDistanceBetween } from '../utilities';
 import { renderCar } from './car';
 import { showCongrats } from './congrats';
@@ -45,11 +45,16 @@ export const createNewTrack = (newCar: ICar) => {
 
 export const removeTrack = async (id: number) => {  
   const currentPage = store.carsPage;
+  const winnersCurrentPage = store.winnersPage;
   const garage = document.querySelector('.garage');  
   await deleteCar(id);
+  await deleteWinner(id);
   const response = await getCars(currentPage);
   store.cars = response.items;
-  store.carsCount = response.totalCount;  
+  store.carsCount = response.totalCount;
+  const winnersResponce = await getWinners(winnersCurrentPage, 10, store.sortBy, store.sortOrder);
+  store.winners = winnersResponce.items;
+  store.winnersCount = winnersResponce.totalCount;  
   (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
 }
 

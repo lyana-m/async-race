@@ -1,20 +1,24 @@
 import './style.scss';
 import { renderGaragePage } from './garage-page/garage-page';
 import { renderHeader } from './garage-page/header';
-import { createElement, makeBtnActive } from './utilities';
+import { createElement } from './utilities';
 import { renderModal } from './garage-page/modal';
-import { renderCongrats, closeCongrats } from './garage-page/congrats';
+import { renderCongrats } from './garage-page/congrats';
 import { renderWinnersPage } from './winners-page/winners-page';
 import { removeTrack, startDriving, startRace, stopDriving, stopRace, updateTrack } from './garage-page/track';
 import { updateWinBtnState, winNextBtnHandler, winPrevBtnHandler } from './winners-page/winners-footer';
 import { nextBtnHandler, prevBtnHandler, updateGargeBtnState } from './garage-page/footer';
-import { sort } from './winners-page/winners-table';
+import { renderTable, sort } from './winners-page/winners-table';
 
 const body = document.querySelector('body');
 const header = renderHeader();
 const main = createElement('main', ['main']);
 const garagePage = renderGaragePage();
+const winnersPage = renderWinnersPage();
+(<HTMLElement>winnersPage).style.display = 'none';
+
 main.appendChild(garagePage);
+main.appendChild(winnersPage);
 const modal = renderModal();
 const congrats = renderCongrats();
 
@@ -48,8 +52,7 @@ document.addEventListener('click', (event: Event) => {
     startRace();
   };
   if ((<HTMLElement>target).classList.contains('btn-reset')) {
-    stopRace();
-    // closeCongrats();
+    stopRace();  
   };
   if ((<HTMLElement>target).classList.contains('btn-garage')) {  
     toGarage();
@@ -77,9 +80,16 @@ document.addEventListener('click', (event: Event) => {
   };
 })
 
-export const toWinners = async () => {
-  const winnersPage = renderWinnersPage();
-  const main = document.querySelector('.main');
+export const toWinners = () => {
+  const garagePage = document.querySelector('.garage-page');
+  const winnersPage = document.querySelector('.winners-page');
+  const winners = document.querySelector('.winners');
+  (<HTMLElement>garagePage).style.display = 'none';
+  (<HTMLElement>winnersPage).style.display = 'block';
+
+  // const winnersPage = renderWinnersPage();
+  // const main = document.querySelector('.main');
+  const winnersTable = renderTable();
   const garageBtn = document.querySelector('.btn-garage');
   const winnersBtn = document.querySelector('.btn-winners');  
   const btnContainers = document.querySelectorAll('.header-btn-subcontainer');  
@@ -88,13 +98,19 @@ export const toWinners = async () => {
   winnersBtn?.classList.add('btn-active');  
   btnContainers.forEach(c => (<HTMLElement>c).style.display = 'none');
 
-  main!.innerHTML = winnersPage.outerHTML;
+  // main!.innerHTML = winnersPage.outerHTML;
+  winners!.innerHTML = winnersTable.outerHTML;
   updateWinBtnState();
 }
 
 export const toGarage = () => {
-  const garagePage = renderGaragePage();
-  const main = document.querySelector('.main');
+  const garagePage = document.querySelector('.garage-page');
+  const winnersPage = document.querySelector('.winners-page');
+  (<HTMLElement>garagePage).style.display = 'block';
+  (<HTMLElement>winnersPage).style.display = 'none';
+
+  // const garagePage = renderGaragePage();
+  // const main = document.querySelector('.main');
   const garageBtn = document.querySelector('.btn-garage');
   const winnersBtn = document.querySelector('.btn-winners');  
   const btnContainers = document.querySelectorAll('.header-btn-subcontainer');
@@ -103,6 +119,6 @@ export const toGarage = () => {
   garageBtn?.classList.add('btn-active');  
   btnContainers.forEach(c => (<HTMLElement>c).style.display = 'flex')
 
-  main!.innerHTML = garagePage.outerHTML;
+  // main!.innerHTML = garagePage.outerHTML;
   updateGargeBtnState();
 }

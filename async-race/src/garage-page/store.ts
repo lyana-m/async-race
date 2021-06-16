@@ -16,7 +16,7 @@ interface IStore {
   animation: IAnimation,
   winnersPage: number,
   winners: IWinnerMod[],
-  winnersCount: string | null
+  winnersCount: string | null,
   sortBy: string,
   sortOrder: string
 }

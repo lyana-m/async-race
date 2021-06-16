@@ -1,11 +1,7 @@
-import { renderHeader } from './header';
 import { renderGarage, ICar } from './garage';
 import { createElement } from '../utilities';
-import { renderModal } from './modal';
-import { createNewTrack, removeTrack, startDriving, startRace, stopDriving, stopRace, updateTrack } from './track';
+import { createNewTrack } from './track';
 import { renderFooter } from './footer';
-import { closeCongrats, renderCongrats } from './congrats';
-import { store } from './store';
 
 export const fragment = document.createDocumentFragment();
 
