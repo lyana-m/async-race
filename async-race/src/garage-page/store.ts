@@ -1,4 +1,4 @@
-import { getCars, getWinners, IWinner, IWinnerMod } from '../api';
+import { getCars, getWinners, IWinnerMod } from '../api';
 import { ICar } from './garage';
 
 const response = await getCars(1);

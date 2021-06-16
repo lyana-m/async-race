@@ -1,6 +1,7 @@
 import { getWinners } from "../api";
 import { store } from "../garage-page/store";
 import { createElement } from "../utilities";
+import { WINNERS_PER_PAGE } from "../variables";
 import { renderTable } from "./winners-table";
 
 export const renderWinnersFooter = () => {
@@ -17,7 +18,7 @@ export const renderWinnersFooter = () => {
 export const winNextBtnHandler = async () => {
   const winners = document.querySelector('.winners');  
   const currentPage = store.winnersPage;
-  const response = await getWinners(currentPage + 1, 10, store.sortBy, store.sortOrder);
+  const response = await getWinners(currentPage + 1, WINNERS_PER_PAGE, store.sortBy, store.sortOrder);
   store.winners = response.items;
   store.winnersPage++;
   updateWinBtnState();
@@ -27,7 +28,7 @@ export const winNextBtnHandler = async () => {
 export const winPrevBtnHandler = async () => {
   const winners = document.querySelector('.winners');
   const currentPage = store.winnersPage;
-  const response = await getWinners(currentPage - 1, 10, store.sortBy, store.sortOrder);
+  const response = await getWinners(currentPage - 1, WINNERS_PER_PAGE, store.sortBy, store.sortOrder);
   store.winners = response.items;
   store.winnersPage--;
   updateWinBtnState();
@@ -47,7 +48,7 @@ export const updateWinBtnState = () => {
     }
   } else {
     if (prevBtn) prevBtn.disabled = false;    
-    if ((store.winnersPage - 1) * 10 + store.winners.length === +store.winnersCount!) {
+    if ((store.winnersPage - 1) * WINNERS_PER_PAGE + store.winners.length === +store.winnersCount!) {
       if (nextBtn) nextBtn.disabled = true;
     } else {
       if (nextBtn) nextBtn.disabled = false;

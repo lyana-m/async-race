@@ -1,4 +1,4 @@
-import { store } from "./garage-page/store";
+import { CARS_PER_PAGE, WINNERS_PER_PAGE } from "./variables";
 
 const baseURL = 'http://127.0.0.1:3000';
 const garage = `${baseURL}/garage`;
@@ -36,7 +36,7 @@ export const getCar = async (id: number) => {
   return await response.json();
 }
 
-export const getCars = async (page: number, limit: number = 7) => {
+export const getCars = async (page: number, limit: number = CARS_PER_PAGE) => {
   const response = await fetch(`${garage}?_page=${page}&_limit=${limit}`, {
     method: 'GET',
   });  
@@ -103,7 +103,7 @@ export const getWinner = async (id: number) => {
   return await response.json();
 }
 
-export const getWinners = async (page: number, limit: number = 10, sort: string, order: string): Promise<IWinners>  => {
+export const getWinners = async (page: number, limit: number = WINNERS_PER_PAGE, sort: string, order: string): Promise<IWinners>  => {
   const response = await fetch(`${winners}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`, {
     method: 'GET',
   });
@@ -147,7 +147,6 @@ export const checkWinner = async (id: number) => {
   const response = await fetch(`${winners}/${id}`, {
     method: 'GET'
   });  
-  // return response.status === 404 ? false : true;
   return {
     isCreated: response.status !== 404,
     item: await response.json()

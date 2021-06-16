@@ -1,8 +1,7 @@
 import { renderCar } from "../garage-page/car";
 import { createElement } from "../utilities"
 
-export const renderEntry = (number: number, color: string, name: string, wins: number, time: number) => {
-  
+export const renderEntry = (number: number, color: string, name: string, wins: number, time: number) => {  
   const row = createElement('tr', ['table-row']);
   const carNumber = createElement('td', ['row-number'], `${number}`);
   const carImage = createElement('td', ['row-car'], 'car');
@@ -15,7 +14,6 @@ export const renderEntry = (number: number, color: string, name: string, wins: n
   row.appendChild(carImage);
   row.appendChild(carName);
   row.appendChild(carWins);
-  row.appendChild(carTime);  
-
+  row.appendChild(carTime);
   return row;
 }

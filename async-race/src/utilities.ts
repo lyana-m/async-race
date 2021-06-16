@@ -1,5 +1,6 @@
 import { createCar, IBody } from "./api";
 import { store } from "./garage-page/store";
+import { DISTANCE_OFFSET } from "./variables";
 
 export const carImage = `
   <?xml version="1.0"?>
@@ -37,11 +38,10 @@ const getRandomName = () => {
 }
 
 const getRandomColor = () => {
-  const r = Math.floor(Math.random() * (256));
-  const g = Math.floor(Math.random() * (256));
-  const b = Math.floor(Math.random() * (256));
-  const color = '#' + r.toString(16) + g.toString(16) + b.toString(16);
-  return color
+  let color = "#";
+  for (let i = 0; i < 3; i++)
+    color += ("0" + Math.floor(((1 + Math.random()) * Math.pow(18, 2)) / 2).toString(16)).slice(-2);
+  return color;
 }
 
 export const createRandomCars = () => {
@@ -72,7 +72,7 @@ export const animateCar = (car: HTMLElement, id: number, distance: number, durat
     const elapsedTime = timestamp - start;
     const passedDistance = Math.round(elapsedTime * (distance / duration));
 
-    car!.style.transform = `translateX(${Math.min(passedDistance, distance) + 70}px)`;
+    car!.style.transform = `translateX(${Math.min(passedDistance, distance) + DISTANCE_OFFSET}px)`;
     
     if (elapsedTime < duration) {
       requestId = window.requestAnimationFrame(move);      

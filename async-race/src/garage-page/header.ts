@@ -19,7 +19,6 @@ export const renderHeader = () => {
   const btnRace = createElement('button', ['btn', 'btn-race'], 'race');
   const btnReset = createElement('button', ['btn', 'btn-reset'], 'reset');
   (<HTMLButtonElement>btnReset).disabled = true;
-
   btnCreate.addEventListener('click', () => showModal('create'));
   btnRandom.addEventListener('click', async () => {
     const nextBtn: HTMLButtonElement | null = document.querySelector('.btn-next');
@@ -28,13 +27,10 @@ export const renderHeader = () => {
     const currentPage = store.carsPage;
     const response = await getCars(currentPage);
     store.cars = response.items;
-    store.carsCount = response.totalCount;
-    
+    store.carsCount = response.totalCount;    
     (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
-
     if (nextBtn) makeBtnActive(nextBtn);
-  })
-
+  });
   subcontainer1.appendChild(btnCreate);
   subcontainer1.appendChild(btnRandom);
   subcontainer2.appendChild(btnRace);
@@ -47,6 +43,5 @@ export const renderHeader = () => {
   wrapper.appendChild(h1);
   wrapper.appendChild(rightContainer);
   header.appendChild(wrapper);
-
   return header;
 }

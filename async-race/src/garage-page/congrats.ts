@@ -5,8 +5,7 @@ export const renderCongrats = () => {
   const overlay = createElement('div', ['overlay', 'congrats-overlay']);
   const modalInner = createElement('div', ['modal-inner'])
   const text = createElement('h2', ['congrats-header'], 'kykyky');
-  const close = createElement('div', ['close-icon']);
-  
+  const close = createElement('div', ['close-icon']); 
   
   modalInner.appendChild(close);
   modalInner.appendChild(text);
@@ -20,9 +19,7 @@ export const renderCongrats = () => {
 
 export const showCongrats = (name: string, time: number) => {
   const congrats = document.querySelector('.congrats-modal');
-  const text = document.querySelector('.congrats-header');
-  // const btnReset = document.querySelector('.btn-reset');
-  // (<HTMLButtonElement>btnReset).disabled = false;
+  const text = document.querySelector('.congrats-header');  
   (<HTMLElement>text).innerHTML = `${name} went first on ${time} seconds`;
   (<HTMLElement>congrats).style.display = 'flex';
 }
@@ -30,10 +27,8 @@ export const showCongrats = (name: string, time: number) => {
 export const closeCongrats = () => {
   const congrats = document.querySelector('.congrats-modal');
   const text = document.querySelector('.congrats-header');
-  const btnReset = document.querySelector('.btn-reset');
-  // const btnRace = document.querySelector('.btn-race');
+  const btnReset = document.querySelector('.btn-reset');  
   (<HTMLElement>text).innerHTML = '';
   (<HTMLElement>congrats).style.display = 'none';  
-  // (<HTMLButtonElement>btnReset).disabled = true;
   (<HTMLButtonElement>btnReset).disabled = false;
 }

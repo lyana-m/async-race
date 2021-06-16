@@ -1,6 +1,7 @@
 import { getWinners } from "../api";
 import { store } from "../garage-page/store";
 import { createElement } from "../utilities"
+import { WINNERS_PER_PAGE } from "../variables";
 import { renderEntry } from "./table-entry";
 
 interface IWinnerMod {
@@ -29,10 +30,9 @@ export const renderTable = () => {
     <h2 class="page-number">Page #${store.winnersPage}</h2>
   `;  
 
-  const winners = store.winners;
-  
+  const winners = store.winners;  
   winners.forEach((winner: IWinnerMod, index: number) => {
-    const entry = renderEntry((index + 1) + (store.winnersPage - 1) * 10, winner.color, winner.name, winner.wins, winner.time)
+    const entry = renderEntry((index + 1) + (store.winnersPage - 1) * WINNERS_PER_PAGE, winner.color, winner.name, winner.wins, winner.time)
     fragment.appendChild(entry);
   });  
 
@@ -46,7 +46,6 @@ export const renderTable = () => {
   table.appendChild(tbody);
   winnersContainer.appendChild(pageDescription);
   winnersContainer.appendChild(table);
-
   return winnersContainer;
 }
 
@@ -55,7 +54,7 @@ export const sort = async (sortBy: string) => {
   store.sortBy = sortBy;
   const winners = document.querySelector('.winners');
   const currentPage = store.winnersPage;  
-  const response = await getWinners(currentPage, 10, store.sortBy, store.sortOrder);
+  const response = await getWinners(currentPage, WINNERS_PER_PAGE, store.sortBy, store.sortOrder);
   store.winners = response.items;
   (<HTMLElement>winners).innerHTML = renderTable().outerHTML;
 }

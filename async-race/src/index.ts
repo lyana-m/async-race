@@ -86,9 +86,7 @@ export const toWinners = () => {
   const winners = document.querySelector('.winners');
   (<HTMLElement>garagePage).style.display = 'none';
   (<HTMLElement>winnersPage).style.display = 'block';
-
-  // const winnersPage = renderWinnersPage();
-  // const main = document.querySelector('.main');
+  
   const winnersTable = renderTable();
   const garageBtn = document.querySelector('.btn-garage');
   const winnersBtn = document.querySelector('.btn-winners');  
@@ -97,9 +95,8 @@ export const toWinners = () => {
   garageBtn?.classList.remove('btn-active');
   winnersBtn?.classList.add('btn-active');  
   btnContainers.forEach(c => (<HTMLElement>c).style.display = 'none');
-
-  // main!.innerHTML = winnersPage.outerHTML;
-  winners!.innerHTML = winnersTable.outerHTML;
+  
+  winners!.innerHTML = winnersTable.innerHTML;
   updateWinBtnState();
 }
 
@@ -108,17 +105,13 @@ export const toGarage = () => {
   const winnersPage = document.querySelector('.winners-page');
   (<HTMLElement>garagePage).style.display = 'block';
   (<HTMLElement>winnersPage).style.display = 'none';
-
-  // const garagePage = renderGaragePage();
-  // const main = document.querySelector('.main');
+  
   const garageBtn = document.querySelector('.btn-garage');
   const winnersBtn = document.querySelector('.btn-winners');  
   const btnContainers = document.querySelectorAll('.header-btn-subcontainer');
   
   winnersBtn?.classList.remove('btn-active');
   garageBtn?.classList.add('btn-active');  
-  btnContainers.forEach(c => (<HTMLElement>c).style.display = 'flex')
-
-  // main!.innerHTML = garagePage.outerHTML;
+  btnContainers.forEach(c => (<HTMLElement>c).style.display = 'flex');  
   updateGargeBtnState();
 }

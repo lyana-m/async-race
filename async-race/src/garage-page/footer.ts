@@ -1,5 +1,6 @@
 import { getCars } from "../api";
-import { createElement, makeBtnActive, makeBtnDisabled } from "../utilities"
+import { createElement } from "../utilities"
+import { CARS_PER_PAGE } from "../variables";
 import { renderGarage } from "./garage";
 import { store } from "./store";
 
@@ -43,6 +44,7 @@ export const prevBtnHandler = async () => {
 }
 
 export const updateGargeBtnState = () => {
+  
   const nextBtn: HTMLButtonElement | null = document.querySelector('.btn-next');
   const prevBtn: HTMLButtonElement | null = document.querySelector('.btn-prev');  
 
@@ -55,7 +57,7 @@ export const updateGargeBtnState = () => {
     }
   } else {
     if (prevBtn) prevBtn.disabled = false;    
-    if ((store.carsPage - 1) * 7 + store.cars.length === +store.carsCount!) {
+    if ((store.carsPage - 1) * CARS_PER_PAGE + store.cars.length === +store.carsCount!) {
       if (nextBtn) nextBtn.disabled = true;
     } else {
       if (nextBtn) nextBtn.disabled = false;

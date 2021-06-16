@@ -1,5 +1,6 @@
 import { createCar, getCars, updateCar } from "../api";
 import { carImage, createElement, makeBtnActive } from "../utilities";
+import { CARS_PER_PAGE } from "../variables";
 import { renderGarage } from "./garage";
 import { store } from "./store";
 
@@ -8,7 +9,6 @@ export const renderModal = () => {
   const controls = createElement('div', ['controls']);
   const overlay = createElement('div', ['overlay']);
   const header = createElement('h2', ['controls-header'], 'Create car');
-  // const headerUpdate = createElement('h2', ['controls-header'], 'Update car');
   const controlsInner = createElement('div', ['controls-inner']);
   const preview = createElement('div', ['preview-car']);
   const settings = createElement('div', ['settings']);
@@ -21,10 +21,8 @@ export const renderModal = () => {
   preview.innerHTML = `${carImage}`;
   textInput.setAttribute('type', 'text');
   textInput.setAttribute('placeholder', 'Enter car name');
-  // (<HTMLInputElement>textInput).required = true;
   colorInput.setAttribute('type', 'color');
   colorInput.setAttribute('value', '#ffffff');
-  // (<HTMLButtonElement>btnOk).disabled = true;
 
   overlay.addEventListener('click', closeModal);
   btnReset.addEventListener('click', closeModal);
@@ -41,7 +39,6 @@ export const renderModal = () => {
   controlsInner.appendChild(preview);
   controlsInner.appendChild(settings);
   controls.appendChild(header);
-  // controls.appendChild(headerUpdate);
   controls.appendChild(controlsInner);
   modal.appendChild(controls);
   modal.appendChild(overlay);
@@ -85,7 +82,6 @@ const modalHandler = async () => {
   const carProps = getCarProps();
   const currentPage = store.carsPage;
   closeModal();
-  // clearModal();
 
   if (id >= 0) {
     await updateCar(id, carProps);
@@ -98,7 +94,7 @@ const modalHandler = async () => {
     store.cars = response.items;
     store.carsCount = response.totalCount;
 
-    if (+store.carsCount! > 7) {      
+    if (+store.carsCount! > CARS_PER_PAGE) {      
       if (nextBtn) makeBtnActive(nextBtn);
     }    
   }  
@@ -132,4 +128,3 @@ export const getCarProps = () => {
     color: (<HTMLInputElement>colorInput).value
   }
 }
-

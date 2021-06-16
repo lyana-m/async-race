@@ -1,9 +1,10 @@
-import { checkWinner, createWinner, deleteCar, deleteWinner, getCar, getCars, getWinner, getWinners, startEngine, stopEngine, switchToDrive, updateWinner } from '../api';
+import { checkWinner, createWinner, deleteCar, deleteWinner, getCar, getCars, getWinners, startEngine, stopEngine, switchToDrive, updateWinner } from '../api';
 import { animateCar, createElement, getDistanceBetween } from '../utilities';
+import { WINNERS_PER_PAGE } from '../variables';
 import { renderCar } from './car';
 import { showCongrats } from './congrats';
 import { ICar, renderGarage } from './garage';
-import { getCarProps, showModal } from './modal';
+import { showModal } from './modal';
 import { store } from './store';
 
 export const renderTrack = (carName: string, color: string, id: number) => {
@@ -35,7 +36,6 @@ export const renderTrack = (carName: string, color: string, id: number) => {
   track.appendChild(engineBtnContainer);
   track.appendChild(carContainer);
   track.appendChild(flagContainer);
-
   return track;
 }
 
@@ -52,7 +52,7 @@ export const removeTrack = async (id: number) => {
   const response = await getCars(currentPage);
   store.cars = response.items;
   store.carsCount = response.totalCount;
-  const winnersResponce = await getWinners(winnersCurrentPage, 10, store.sortBy, store.sortOrder);
+  const winnersResponce = await getWinners(winnersCurrentPage, WINNERS_PER_PAGE, store.sortBy, store.sortOrder);
   store.winners = winnersResponce.items;
   store.winnersCount = winnersResponce.totalCount;  
   (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
@@ -132,7 +132,7 @@ export const startRace = async () => {
       await updateWinner(winner.id, { ...winner, time: bestTime, wins: winnerItem.item.wins + 1 });      
     }
     const car = await getCar(winner.id);
-    const winners = await getWinners(store.winnersPage, 10, store.sortBy, store.sortOrder);
+    const winners = await getWinners(store.winnersPage, WINNERS_PER_PAGE, store.sortBy, store.sortOrder);
     store.winners = winners.items;
     store.winnersCount = winners.totalCount;
     showCongrats(car.name, winner.time);

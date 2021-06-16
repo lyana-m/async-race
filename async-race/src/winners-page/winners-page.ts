@@ -10,6 +10,5 @@ export const renderWinnersPage = () => {
  
   winnersPage.appendChild(table);
   winnersPage.appendChild(footer);
-
   return winnersPage;
 }
