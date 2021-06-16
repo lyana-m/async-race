@@ -1,8 +1,8 @@
-import { getCars } from "../api";
-import { createElement, createRandomCars, makeBtnActive } from "../utilities";
-import { renderGarage } from "./garage";
-import { showModal } from "./modal";
-import { store } from "./store";
+import { getCars } from '../api';
+import { createElement, createRandomCars, makeBtnActive } from '../utilities';
+import { renderGarage } from './garage';
+import { showModal } from './modal';
+import { store } from './store';
 
 export const renderHeader = () => {
   const header = createElement('header', ['header']);
@@ -27,7 +27,7 @@ export const renderHeader = () => {
     const currentPage = store.carsPage;
     const response = await getCars(currentPage);
     store.cars = response.items;
-    store.carsCount = response.totalCount;    
+    store.carsCount = response.totalCount;
     (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
     if (nextBtn) makeBtnActive(nextBtn);
   });
@@ -44,4 +44,4 @@ export const renderHeader = () => {
   wrapper.appendChild(rightContainer);
   header.appendChild(wrapper);
   return header;
-}
+};

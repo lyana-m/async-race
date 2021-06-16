@@ -1,8 +1,92 @@
-import { createCar, getCars, updateCar } from "../api";
-import { carImage, createElement, makeBtnActive } from "../utilities";
-import { CARS_PER_PAGE } from "../variables";
-import { renderGarage } from "./garage";
-import { store } from "./store";
+import { createCar, getCars, updateCar } from '../api';
+import { carImage, createElement, makeBtnActive } from '../utilities';
+import { CARS_PER_PAGE } from '../variables';
+import { renderGarage } from './garage';
+import { store } from './store';
+
+export const checkField = () => {
+  const input = document.querySelector('.text-input');
+  const { value } = <HTMLInputElement>input;
+  const btnOk = document.querySelector('.btn-ok');
+  if (value) {
+    (<HTMLButtonElement>btnOk).disabled = false;
+  } else {
+    (<HTMLButtonElement>btnOk).disabled = true;
+  }
+};
+
+export const showModal = (action: string) => {
+  const modal = document.querySelector('.car-modal');
+  const header = document.querySelector('.controls-header');
+  if (action === 'create') {
+    (<HTMLElement>header).innerHTML = 'Create car';
+  } else {
+    (<HTMLElement>header).innerHTML = 'Update car';
+  }
+  (<HTMLElement>modal).style.display = 'flex';
+  checkField();
+};
+
+export const clearModal = () => {
+  const textInput = document.querySelector('.text-input');
+  const colorInput = document.querySelector('.color-input');
+  (<HTMLInputElement>textInput).value = '';
+  (<HTMLInputElement>colorInput).value = '#ffffff';
+  const carParts = document.querySelectorAll('.preview-car svg path');
+  carParts.forEach((carPart) => {
+    (<HTMLElement>carPart).style.fill = '#ffffff';
+  });
+};
+
+export const closeModal = () => {
+  const modal = document.querySelector('.car-modal');
+  (<HTMLElement>modal).style.display = 'none';
+  store.selectedId = -1;
+  clearModal();
+};
+
+export const getCarProps = () => {
+  const textInput = document.querySelector('.text-input');
+  const colorInput = document.querySelector('.color-input');
+  return {
+    name: (<HTMLInputElement>textInput).value,
+    color: (<HTMLInputElement>colorInput).value,
+  };
+};
+
+const modalHandler = async () => {
+  const garage = document.querySelector('.garage');
+  const nextBtn: HTMLButtonElement | null = document.querySelector('.btn-next');
+  const id = store.selectedId;
+  const carProps = getCarProps();
+  const currentPage = store.carsPage;
+  closeModal();
+
+  if (id >= 0) {
+    await updateCar(id, carProps);
+    store.selectedId = -1;
+    const response = await getCars(currentPage);
+    store.cars = response.items;
+  } else {
+    await createCar(carProps);
+    const response = await getCars(currentPage);
+    store.cars = response.items;
+    store.carsCount = response.totalCount;
+
+    if (+store.carsCount! > CARS_PER_PAGE) {
+      if (nextBtn) makeBtnActive(nextBtn);
+    }
+  }
+  (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
+};
+
+export const colorPreview = (colorInput: HTMLElement) => {
+  const color = (<HTMLInputElement>colorInput).value;
+  const carParts = document.querySelectorAll('.preview-car svg path');
+  carParts.forEach((carPart) => {
+    (<HTMLElement>carPart).style.fill = `${color}`;
+  });
+};
 
 export const renderModal = () => {
   const modal = createElement('div', ['modal', 'car-modal']);
@@ -43,88 +127,4 @@ export const renderModal = () => {
   modal.appendChild(controls);
   modal.appendChild(overlay);
   return modal;
-}
-
-export const showModal = (action: string) => {
-  const modal = document.querySelector('.car-modal');
-  const header = document.querySelector('.controls-header');
-  if (action === 'create') {
-    (<HTMLElement>header).innerHTML = 'Create car';
-  } else {
-    (<HTMLElement>header).innerHTML = 'Update car';
-  }
-  (<HTMLElement>modal).style.display = 'flex';
-  checkField();
-}
-
-export const closeModal = () => {
-  const modal = document.querySelector('.car-modal');
-  (<HTMLElement>modal).style.display = 'none';
-  store.selectedId = -1;
-  clearModal();  
-}
-
-export const clearModal = () => {
-  const textInput = document.querySelector('.text-input');
-  const colorInput = document.querySelector('.color-input');
-  (<HTMLInputElement>textInput).value = '';
-  (<HTMLInputElement>colorInput).value = '#ffffff';
-  const carParts = document.querySelectorAll('.preview-car svg path');
-  carParts.forEach(carPart => {
-    (<HTMLElement>carPart).style.fill = '#ffffff';
-  });
-}
-
-const modalHandler = async () => {
-  const garage = document.querySelector('.garage');
-  const nextBtn: HTMLButtonElement | null = document.querySelector('.btn-next');
-  const id = store.selectedId;  
-  const carProps = getCarProps();
-  const currentPage = store.carsPage;
-  closeModal();
-
-  if (id >= 0) {
-    await updateCar(id, carProps);
-    store.selectedId = -1;
-    const response = await getCars(currentPage);
-    store.cars = response.items;
-  } else {
-    await createCar(carProps);
-    const response = await getCars(currentPage);
-    store.cars = response.items;
-    store.carsCount = response.totalCount;
-
-    if (+store.carsCount! > CARS_PER_PAGE) {      
-      if (nextBtn) makeBtnActive(nextBtn);
-    }    
-  }  
-  (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
-}
-
-export const colorPreview = (colorInput: HTMLElement) => {
-  const color = (<HTMLInputElement>colorInput).value;
-  const carParts = document.querySelectorAll('.preview-car svg path');
-  carParts.forEach(carPart => {
-    (<HTMLElement>carPart).style.fill = `${color}`;
-  });
-}
-
-export const checkField = () => {
-  const input = document.querySelector('.text-input');
-  const value = (<HTMLInputElement>input).value;
-  const btnOk = document.querySelector('.btn-ok');
-  if (value) {
-    (<HTMLButtonElement>btnOk).disabled = false;
-  } else {
-    (<HTMLButtonElement>btnOk).disabled = true;
-  }
-}
-
-export const getCarProps = () => {
-  const textInput = document.querySelector('.text-input');
-  const colorInput = document.querySelector('.color-input');
-  return {
-    name: (<HTMLInputElement>textInput).value,
-    color: (<HTMLInputElement>colorInput).value
-  }
-}
+};

@@ -1,6 +1,6 @@
-import { createCar, IBody } from "./api";
-import { store } from "./garage-page/store";
-import { DISTANCE_OFFSET } from "./variables";
+import { createCar, IBody } from './api';
+import { store } from './garage-page/store';
+import { DISTANCE_OFFSET } from './variables';
 
 export const carImage = `
   <?xml version="1.0"?>
@@ -26,7 +26,7 @@ export const createElement = (tagName: keyof HTMLElementTagNameMap, classes: str
   element.classList.add(...classes);
   element.innerHTML = text;
   return element;
-}
+};
 
 const names = ['Lada', 'Opel', 'Skoda', 'Reno', 'Mersedes', 'Audi', 'Toyota', 'Volkswagen', 'Nissan', 'Rolls-Royce', 'Aston Martin', 'Kia'];
 const models = ['Golf', 'Corolla', 'Tiguan', 'X-Ray', 'Qashqai', 'Logan', 'Tuareg', 'Passat', 'Rio', 'Sportage', 'TT', 'R8'];
@@ -34,35 +34,34 @@ const models = ['Golf', 'Corolla', 'Tiguan', 'X-Ray', 'Qashqai', 'Logan', 'Tuare
 const getRandomName = () => {
   const name = names[Math.floor(Math.random() * names.length)];
   const model = models[Math.floor(Math.random() * models.length)];
-  return `${name} ${model}`
-}
+  return `${name} ${model}`;
+};
 
 const getRandomColor = () => {
-  let color = "#";
-  for (let i = 0; i < 3; i++)
-    color += ("0" + Math.floor(((1 + Math.random()) * Math.pow(18, 2)) / 2).toString(16)).slice(-2);
+  let color = '#';
+  for (let i = 0; i < 3; i++) color += (`0${Math.floor(((1 + Math.random()) * (18 ** 2)) / 2).toString(16)}`).slice(-2);
   return color;
-}
+};
 
 export const createRandomCars = () => {
-  let carProps: IBody[] = []
+  const carProps: IBody[] = [];
   for (let i = 0; i < 100; i++) {
-    carProps[i] = { name: getRandomName(), color: getRandomColor() }
+    carProps[i] = { name: getRandomName(), color: getRandomColor() };
   }
-  carProps.forEach(car => createCar(car));
-}
+  carProps.forEach((car) => createCar(car));
+};
 
 export const getDistanceBetween = (car: HTMLElement, flag: HTMLElement) => {
   const carProps = car.getBoundingClientRect();
-  const flagProps = flag.getBoundingClientRect();  
+  const flagProps = flag.getBoundingClientRect();
   const carCenter = carProps.x + carProps.width / 2;
   const flagCenter = flagProps.x + flagProps.width / 2;
   return flagCenter - carCenter;
-}
+};
 
 export const animateCar = (car: HTMLElement, id: number, distance: number, duration: number) => {
   let start: number;
-  let requestId: number;  
+  let requestId: number;
 
   function move(timestamp: DOMHighResTimeStamp) {
     if (start === undefined) {
@@ -73,20 +72,19 @@ export const animateCar = (car: HTMLElement, id: number, distance: number, durat
     const passedDistance = Math.round(elapsedTime * (distance / duration));
 
     car!.style.transform = `translateX(${Math.min(passedDistance, distance) + DISTANCE_OFFSET}px)`;
-    
+
     if (elapsedTime < duration) {
-      requestId = window.requestAnimationFrame(move);      
+      requestId = window.requestAnimationFrame(move);
       store.animation[id] = requestId;
     }
   }
-  requestId = window.requestAnimationFrame(move);  
-  return;
-}
+  requestId = window.requestAnimationFrame(move);
+};
 
-export const makeBtnActive = (btn: HTMLButtonElement) => {   
+export const makeBtnActive = (btn: HTMLButtonElement) => {
   btn.disabled = false;
-}
+};
 
-export const makeBtnDisabled = (btn: HTMLButtonElement) => {  
+export const makeBtnDisabled = (btn: HTMLButtonElement) => {
   btn.disabled = true;
-}
+};

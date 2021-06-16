@@ -31,5 +31,5 @@ export const store: IStore = {
   winners: winnersResponse.items,
   winnersCount: winnersResponse.totalCount,
   sortBy: 'id',
-  sortOrder: 'ASC'
-}
+  sortOrder: 'ASC',
+};

@@ -8,8 +8,8 @@ export interface ICar {
   id: number
 }
 
-export const renderGarage = () => {  
-  const garage = createElement('div', ['garage']);  
+export const renderGarage = () => {
+  const garage = createElement('div', ['garage']);
   const pageDescription = createElement('div', ['page-description']);
   const fragment = document.createDocumentFragment();
 
@@ -20,12 +20,12 @@ export const renderGarage = () => {
 
   fragment.appendChild(pageDescription);
 
-  store.cars.map((car: ICar) => {
+  store.cars.forEach((car: ICar) => {
     fragment.appendChild(renderTrack(car.name, car.color, car.id));
-  });  
+  });
 
   garage.appendChild(pageDescription);
   garage.appendChild(fragment);
-  
+
   return garage;
-}
+};
