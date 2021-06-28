@@ -47,15 +47,19 @@ export const removeTrack = async (id: number) => {
   const currentPage = store.carsPage;
   const winnersCurrentPage = store.winnersPage;
   const garage = document.querySelector('.garage');
-  await deleteCar(id);
-  await deleteWinner(id);
-  const response = await getCars(currentPage);
-  store.cars = response.items;
-  store.carsCount = response.totalCount;
-  const winnersResponce = await getWinners(winnersCurrentPage, WINNERS_PER_PAGE, store.sortBy, store.sortOrder);
-  store.winners = winnersResponce.items;
-  store.winnersCount = winnersResponce.totalCount;
-  (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
+  const isCarDeleted = await deleteCar(id);
+  if (isCarDeleted) {
+    await deleteWinner(id);
+    const response = await getCars(currentPage);
+    store.cars = response.items;
+    store.carsCount = response.totalCount;
+    const winnersResponce = await getWinners(winnersCurrentPage, WINNERS_PER_PAGE, store.sortBy, store.sortOrder);
+    store.winners = winnersResponce.items;
+    store.winnersCount = winnersResponce.totalCount;
+    (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
+  } else {
+    alert(`Car with id: ${id} not found`);
+  }
 };
 
 export const updateTrack = (id: number) => {
@@ -108,12 +112,16 @@ export const stopDriving = async (id: number) => {
   const startBtn = track!.querySelector('.btn-start');
   const stopBtn = track!.querySelector('.btn-stop');
 
-  await stopEngine(id);
+  const isCarStopped = await stopEngine(id);
 
-  cancelAnimationFrame(store.animation[id]);
-  car!.style.transform = 'translateX(0)';
-  (<HTMLButtonElement>startBtn).disabled = false;
-  (<HTMLButtonElement>stopBtn).disabled = true;
+  if (isCarStopped) {
+    cancelAnimationFrame(store.animation[id]);
+    car!.style.transform = 'translateX(0)';
+    (<HTMLButtonElement>startBtn).disabled = false;
+    (<HTMLButtonElement>stopBtn).disabled = true;
+  } else {
+    alert(`Car with id: ${id} not found`);
+  }
 };
 
 export const startRace = async () => {
