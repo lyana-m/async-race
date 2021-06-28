@@ -1,6 +1,6 @@
-import { createCar, getCars, updateCar } from '../api';
+import { createCar, getCars, updateCar, getWinners } from '../api';
 import { carImage, createElement, makeBtnActive } from '../utilities';
-import { CARS_PER_PAGE } from '../variables';
+import { CARS_PER_PAGE, WINNERS_PER_PAGE } from '../variables';
 import { renderGarage } from './garage';
 import { store } from './store';
 
@@ -67,6 +67,9 @@ const modalHandler = async () => {
     store.selectedId = -1;
     const response = await getCars(currentPage);
     store.cars = response.items;
+    const winnersCurrentPage = store.winnersPage;
+    const winnersResponse = await getWinners(winnersCurrentPage, WINNERS_PER_PAGE, store.sortBy, store.sortOrder);
+    store.winners = winnersResponse.items;
   } else {
     await createCar(carProps);
     const response = await getCars(currentPage);
