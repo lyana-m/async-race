@@ -1,16 +1,8 @@
-import { getWinners } from '../api';
+import { getWinners, IWinnerCar } from '../api';
 import { store } from '../garage-page/store';
 import { createElement } from '../utilities';
 import { WINNERS_PER_PAGE } from '../variables';
 import { renderEntry } from './table-entry';
-
-interface IWinnerMod {
-  id: number,
-  time: number,
-  wins: number,
-  name: string,
-  color: string
-}
 
 export const renderTable = () => {
   const winnersContainer = createElement('div', ['winners']);
@@ -31,7 +23,7 @@ export const renderTable = () => {
   `;
 
   const { winners } = store;
-  winners.forEach((winner: IWinnerMod, index: number) => {
+  winners.forEach((winner: IWinnerCar, index: number) => {
     const entry = renderEntry((index + 1) + (store.winnersPage - 1) * WINNERS_PER_PAGE, winner.color, winner.name, winner.wins, winner.time);
     fragment.appendChild(entry);
   });

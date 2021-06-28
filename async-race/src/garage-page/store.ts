@@ -1,4 +1,4 @@
-import { getCars, getWinners, IWinnerMod } from '../api';
+import { getCars, getWinners, IWinnerCar } from '../api';
 import { ICar } from './garage';
 
 const response = await getCars(1);
@@ -15,7 +15,7 @@ interface IStore {
   selectedId: number,
   animation: IAnimation,
   winnersPage: number,
-  winners: IWinnerMod[],
+  winners: IWinnerCar[],
   winnersCount: string | null,
   sortBy: string,
   sortOrder: string

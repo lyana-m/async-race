@@ -13,19 +13,13 @@ export interface ICar {
 export interface IWinner {
   id: number,
   time: number,
-  wins?: number
+  wins: number
 }
 
-export interface IWinnerMod {
-  id: number,
-  time: number,
-  wins: number,
-  name: string,
-  color: string
-}
+export type IWinnerCar = IWinner & ICar;
 
 interface IWinners {
-  items: IWinnerMod[],
+  items: IWinnerCar[],
   totalCount: string | null
 }
 
