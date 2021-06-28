@@ -5,7 +5,7 @@ const garage = `${baseURL}/garage`;
 const winners = `${baseURL}/winners`;
 const engine = `${baseURL}/engine`;
 
-export interface IBody {
+export interface ICar {
   name: string,
   color: string
 }
@@ -46,7 +46,7 @@ export const getCars = async (page: number, limit: number = CARS_PER_PAGE) => {
   };
 };
 
-export const createCar = async (body: IBody) => {
+export const createCar = async (body: ICar) => {
   const response = await fetch(`${garage}`, {
     method: 'POST',
     body: JSON.stringify(body),
@@ -64,7 +64,7 @@ export const deleteCar = async (id: number) => {
   await response.json();
 };
 
-export const updateCar = async (id: number, body: IBody) => {
+export const updateCar = async (id: number, body: ICar) => {
   const response = await fetch(`${garage}/${id}`, {
     method: 'PUT',
     body: JSON.stringify(body),

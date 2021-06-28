@@ -1,4 +1,4 @@
-import { createCar, IBody } from './api';
+import { createCar, ICar } from './api';
 import { store } from './garage-page/store';
 import { DISTANCE_OFFSET } from './variables';
 
@@ -44,7 +44,7 @@ const getRandomColor = () => {
 };
 
 export const createRandomCars = () => {
-  const carProps: IBody[] = [];
+  const carProps: ICar[] = [];
   for (let i = 0; i < 100; i++) {
     carProps[i] = { name: getRandomName(), color: getRandomColor() };
   }
