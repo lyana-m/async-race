@@ -3,6 +3,7 @@
   "scripts": {
     "build": "webpack",
     "dev": "webpack serve --env develop",
+    "start": "webpack --watch",
     "lint": "eslint src",
     "format": "prettier --write"
   },
