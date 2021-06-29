@@ -1,4 +1,4 @@
-export const renderCar = (color: string) => `
+export const getCarImage = (color: string) => `
     <?xml version="1.0"?>
     <svg class="car-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
       <g id="_13-car" data-name="13-car">

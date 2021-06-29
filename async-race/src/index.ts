@@ -9,7 +9,7 @@ import {
   removeTrack, startDriving, startRace, stopDriving, stopRace, updateTrack,
 } from './garage-page/track';
 import { updateWinBtnState, winNextBtnHandler, winPrevBtnHandler } from './winners-page/winners-footer';
-import { nextBtnHandler, prevBtnHandler, updateGargeBtnState } from './garage-page/footer';
+import { nextBtnHandler, prevBtnHandler, updateGarageBtnState } from './garage-page/footer';
 import { renderTable, sort } from './winners-page/winners-table';
 
 const body = document.querySelector('body');
@@ -30,7 +30,7 @@ body?.appendChild(modal);
 body?.appendChild(congrats);
 
 const init = () => {
-  updateGargeBtnState();
+  updateGarageBtnState();
 };
 init();
 
@@ -67,7 +67,7 @@ export const toGarage = () => {
   winnersBtn?.classList.remove('btn-active');
   garageBtn?.classList.add('btn-active');
   btnContainers.forEach((c) => (<HTMLElement>c).style.display = 'flex');
-  updateGargeBtnState();
+  updateGarageBtnState();
 };
 
 document.addEventListener('click', (event: Event) => {

@@ -15,20 +15,24 @@ export const renderFooter = () => {
   return footer;
 };
 
-export const updateGargeBtnState = () => {
+export const updateGarageBtnState = () => {
   const nextBtn: HTMLButtonElement | null = document.querySelector('.btn-next');
   const prevBtn: HTMLButtonElement | null = document.querySelector('.btn-prev');
 
+  if (!nextBtn || !prevBtn) {
+    return;
+  }
+
   if (store.carsPage === 1) {
-    if (prevBtn) prevBtn.disabled = true;
+    prevBtn.disabled = true;
     if (store.cars.length < +store.carsCount!) {
-      if (nextBtn) nextBtn.disabled = false;
-    } else if (nextBtn) nextBtn.disabled = true;
+      nextBtn.disabled = false;
+    } else nextBtn.disabled = true;
   } else {
-    if (prevBtn) prevBtn.disabled = false;
+    prevBtn.disabled = false;
     if ((store.carsPage - 1) * CARS_PER_PAGE + store.cars.length === +store.carsCount!) {
-      if (nextBtn) nextBtn.disabled = true;
-    } else if (nextBtn) nextBtn.disabled = false;
+      nextBtn.disabled = true;
+    } else nextBtn.disabled = false;
   }
 };
 
@@ -40,7 +44,7 @@ export const nextBtnHandler = async () => {
   const response = await getCars(currentPage + 1);
   store.cars = response.items;
   store.carsPage++;
-  updateGargeBtnState();
+  updateGarageBtnState();
   (<HTMLButtonElement>raceBtn).disabled = false;
   (<HTMLButtonElement>resetBtn).disabled = true;
   (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;
@@ -54,7 +58,7 @@ export const prevBtnHandler = async () => {
   const response = await getCars(currentPage - 1);
   store.cars = response.items;
   store.carsPage--;
-  updateGargeBtnState();
+  updateGarageBtnState();
   (<HTMLButtonElement>raceBtn).disabled = false;
   (<HTMLButtonElement>resetBtn).disabled = true;
   (<HTMLElement>garage).innerHTML = renderGarage().outerHTML;

@@ -3,8 +3,6 @@ import { createElement } from '../utilities';
 import { createNewTrack } from './track';
 import { renderFooter } from './footer';
 
-export const fragment = document.createDocumentFragment();
-
 export const renderGaragePage = () => {
   const garagePage = createElement('div', ['wrapper', 'garage-page']);
   const garage = renderGarage();

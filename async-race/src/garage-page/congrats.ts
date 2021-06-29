@@ -27,8 +27,7 @@ export const renderCongrats = () => {
   modalInner.appendChild(text);
   modal.appendChild(modalInner);
   modal.appendChild(overlay);
-  overlay.addEventListener('click', closeCongrats);
-  close.addEventListener('click', closeCongrats);
+  [overlay, close].forEach(elem => elem.addEventListener('click', closeCongrats));  
 
   return modal;
 };

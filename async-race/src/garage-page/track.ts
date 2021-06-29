@@ -3,7 +3,7 @@ import {
 } from '../api';
 import { animateCar, createElement, getDistanceBetween } from '../utilities';
 import { WINNERS_PER_PAGE } from '../variables';
-import { renderCar } from './car';
+import { getCarImage } from './car';
 import { showCongrats } from './congrats';
 import { ICar, renderGarage } from './garage';
 import { showModal } from './modal';
@@ -21,7 +21,7 @@ export const renderTrack = (carName: string, color: string, id: number) => {
   const btnStop = createElement('button', ['btn-track', 'btn-engine', 'btn-stop'], 'b');
   (<HTMLButtonElement>btnStop).disabled = true;
   const carContainer = createElement('div', ['car-container']);
-  carContainer.innerHTML = `${renderCar(color)}`;
+  carContainer.innerHTML = `${getCarImage(color)}`;
   const flagContainer = createElement('div', ['flag-container']);
   flagContainer.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
