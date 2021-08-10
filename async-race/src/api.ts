@@ -1,6 +1,6 @@
 import { CARS_PER_PAGE, WINNERS_PER_PAGE } from './variables';
 
-const baseURL = 'http://127.0.0.1:3000';
+const baseURL = 'https://shielded-citadel-77214.herokuapp.com';
 const garage = `${baseURL}/garage`;
 const winners = `${baseURL}/winners`;
 const engine = `${baseURL}/engine`;
@@ -30,9 +30,8 @@ export const getCar = async (id: number) => {
     });
     if (response.ok) {
       return await response.json();
-    } else {
-      throw Error(`error: ${response.status} ${response.statusText}`);
     }
+    throw Error(`error: ${response.status} ${response.statusText}`);
   } catch (error) {
     throw Error(error);
   }
@@ -48,9 +47,8 @@ export const getCars = async (page: number, limit: number = CARS_PER_PAGE) => {
         items: await response.json(),
         totalCount: response.headers.get('X-Total-Count'),
       };
-    } else {
-      throw Error(`error: ${response.status} ${response.statusText}`);
     }
+    throw Error(`error: ${response.status} ${response.statusText}`);
   } catch (error) {
     throw Error(error);
   }
@@ -66,10 +64,9 @@ export const createCar = async (body: ICar) => {
       },
     });
     if (response.ok) {
-      return response.json();
-    } else {
-      throw Error(`error: ${response.status} ${response.statusText}`);
+      return await response.json();
     }
+    throw Error(`error: ${response.status} ${response.statusText}`);
   } catch (error) {
     throw Error(error);
   }
@@ -83,9 +80,8 @@ export const deleteCar = async (id: number) => {
     if (response.ok) {
       await response.json();
       return true;
-    } else {
-      return false;
     }
+    return false;
   } catch (error) {
     throw Error(error);
   }
@@ -103,9 +99,8 @@ export const updateCar = async (id: number, body: ICar) => {
     if (response.ok) {
       await response.json();
       return true;
-    } else {
-      return false;
     }
+    return false;
   } catch (error) {
     throw Error(error);
   }
@@ -117,10 +112,9 @@ export const startEngine = async (id: number) => {
       method: 'GET',
     });
     if (response.ok) {
-      return response.json();
-    } else {
-      throw Error(`error: ${response.status} ${response.statusText}`);
+      return await response.json();
     }
+    throw Error(`error: ${response.status} ${response.statusText}`);
   } catch (error) {
     throw Error(error);
   }
@@ -134,9 +128,8 @@ export const stopEngine = async (id: number) => {
     if (response.ok) {
       await response.json();
       return true;
-    } else {
-      return false;
     }
+    return false;
   } catch (error) {
     throw Error(error);
   }
@@ -159,10 +152,9 @@ export const getWinner = async (id: number) => {
       method: 'GET',
     });
     if (response.ok) {
-      return response.json();
-    } else {
-      throw Error(`error: ${response.status} ${response.statusText}`);
+      return await response.json();
     }
+    throw Error(`error: ${response.status} ${response.statusText}`);
   } catch (error) {
     throw Error(error);
   }
@@ -179,9 +171,8 @@ export const getWinners = async (page: number, limit: number = WINNERS_PER_PAGE,
         items: await Promise.all(items.map(async (item: IWinner) => ({ ...item, ...await getCar(item.id) }))),
         totalCount: response.headers.get('X-Total-Count'),
       };
-    } else {
-      throw Error(`error: ${response.status} ${response.statusText}`);
     }
+    throw Error(`error: ${response.status} ${response.statusText}`);
   } catch (error) {
     throw Error(error);
   }
@@ -197,10 +188,9 @@ export const createWinner = async (body: IWinner) => {
       },
     });
     if (response.ok) {
-      return response.json();
-    } else {
-      throw Error(`error: ${response.status} ${response.statusText}`);
+      return await response.json();
     }
+    throw Error(`error: ${response.status} ${response.statusText}`);
   } catch (error) {
     throw Error(error);
   }

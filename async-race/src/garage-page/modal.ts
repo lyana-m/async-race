@@ -1,4 +1,6 @@
-import { createCar, getCars, updateCar, getWinners } from '../api';
+import {
+  createCar, getCars, updateCar, getWinners,
+} from '../api';
 import { carImage, createElement, makeBtnActive } from '../utilities';
 import { CARS_PER_PAGE, WINNERS_PER_PAGE } from '../variables';
 import { renderGarage } from './garage';
